@@ -645,6 +645,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $stmtReserva->execute($paramsReserva);
 
+        $idReservaInserida = $pdo->lastInsertId();
+
         /*
         |--------------------------------------------------------------------------
         | ENVIAR E-MAIL DE CONFIRMAÇÃO
@@ -662,6 +664,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  $numeroMesaAtribuida,
                 $optionBeach ? 'Sim' : 'Não'
             );
+                $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');
+                $stmtMarkEmail->execute([':id' => $idReservaInserida]);
             }
         }
 

@@ -145,7 +145,7 @@ if ($idReserva && $novoStatus){
                 $config = $stmtConfig->fetch(PDO::FETCH_ASSOC);
 
                 $stmtDados = $pdo->prepare('
-                    SELECT c.Nome, c.Email, r.Data, r.Horario, r.QTD_pessoas, r.BEACH_CLUB, m.Numero_mesa
+                    SELECT c.Nome, c.Email, r.Data, r.Horario, r.QTD_pessoas, r.BEACH_CLUB, r.email_confirmacao, m.Numero_mesa
                     FROM reserva r
                     JOIN cliente c ON r.FK_Cliente_ID_Cliente = c.ID_cliente
                     LEFT JOIN mesa m ON r.FK_Mesa_ID_Mesa = m.ID_mesa
@@ -182,7 +182,7 @@ if ($idReserva && $novoStatus){
                     }
 
                     if ($config && ($config['enviar_email_confirmacao'] == 1 || $config['enviar_email_confirmacao'] === true)) {
-                        if (!empty($dadosReserva['Email'])) {
+                        if (!empty($dadosReserva['Email']) && (int)$dadosReserva['email_confirmacao'] === 0) {
                             enviarEmailConfirmacao(
                                 $dadosReserva['Email'],
                                 $dadosReserva['Nome'],
@@ -192,6 +192,9 @@ if ($idReserva && $novoStatus){
                                 $dadosReserva['Numero_mesa'] ?? 'A definir',
                                 $dadosReserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não'
                             );
+
+                            $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');
+                            $stmtMarkEmail->execute([':id' => $idReserva]);
                         }
                     }
                 }

@@ -1,0 +1,94 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh; 
+    margin: 0;
+    padding: 0; 
+    box-sizing: border-box;
+    background-color: #f0f2f5; 
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-size: 20px;
+    color: rgb(255, 255, 255);
+}
+
+input {
+    border: none;
+    border-radius: 10px;
+    padding: 12px; 
+    outline: none;
+    width: 100%;
+    box-sizing: border-box; 
+    font-size: 16px; 
+}
+
+button {
+    height: 45px; 
+    border-radius: 10px;
+    border: none;
+    background-color: #ffa43d;
+    color: white;
+    font-weight: 600;
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out, background-color 0.2s;
+}
+
+button:hover {
+    background-color: #ff8800;
+    transform: translateY(-2px);
+    box-shadow: rgba(0, 0, 0, 0.145) 0px 10px 10px;
+    border-bottom: 5px #d06f00 solid;
+}
+
+img {
+    max-width: 300px;
+    display: block;
+    margin: 0 auto; 
+}
+
+.card-login {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    color:#063b3d;
+    border-radius: 30px;
+    padding: 25px 20px;
+    gap: 50px;
+    width: 100%;
+    max-width: 500px;
+    box-sizing: border-box;
+    color:white; 
+    background: linear-gradient(145deg, #06283d, #00608a);
+}
+
+.card-login h2 {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+}
+
+.opcao {
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.erro{
+    color: rgb(255, 63, 63);
+    font-size: 20px;
+    padding: 5px;
+    text-align: start;
+    font-weight: 400;
+    font-family: Arial;
+}
+

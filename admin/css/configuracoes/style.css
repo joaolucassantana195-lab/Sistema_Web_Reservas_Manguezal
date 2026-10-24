@@ -1,0 +1,834 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
+/* Animação de entrada vindo da direita */
+@keyframes pop-up-modal-aparecer {
+    from {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animação de saída voltando para a direita */
+@keyframes pop-up-modal-desaparecer {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(60px);
+    }
+}
+
+:root {
+  /* Cores Principais */
+  --primary-dark: #00405c;
+  --primary-medium: #00608a;
+  --primary-light: #0075a7;
+  --primary-hover: #004e70;
+  --accent-gold: #eeaa5c;
+  --accent-cyan: #96dfff;
+
+  /* Superfícies e Backgrounds */
+  --bg-main: #ececec;
+  --card-bg: #ffffff;
+  --input-bg: #dfdede;
+  --header-bg: #ffffff;
+
+  /* Bordas e Sombras */
+  --border-color: #00618a73;
+  --border-subtle: #cbd5e1;
+  --shadow-sm: 0px 2px 4px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0px 10px 10px rgba(0, 0, 0, 0.103);
+  --shadow-lg: 0px 10px 15px rgba(0, 0, 0, 0.212);
+
+  /* Texto */
+  --text-main: #333333;
+  --text-muted: #c4c4c4;
+  --text-light: #ffffff;
+
+  /* Status / Feedback */
+  --status-success: #0f9a00d8;
+  --status-error: #d61900d8;
+}
+
+
+/*fontes do google fonts*/
+.varela-round-regular {
+  font-family: "Varela Round", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+}
+
+body{
+    margin: 0;
+    width: auto;
+    height: 100%;
+    background-color: white;
+}
+
+header{
+    background-color: #ffffff;
+    width: 100%;
+    min-height: 70px;
+    height: auto;
+    margin: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: fixed;
+    border-bottom: #00618a73 2px solid;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.103);
+    z-index: 9999;
+}
+a{
+    text-decoration: none;
+    color: #00608a;
+}
+nav{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+button{
+    border: none;
+    padding: 0;
+}
+button:hover{
+    cursor: pointer;
+}
+.header-navegacao {
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+.header-navegacao ul{
+    color: white;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 15px;
+    width: 100%;
+    border: 0;
+    margin: 0;
+}
+
+
+main{
+    display: flex;
+}
+
+.navegacao-lateral{
+    display: flex;
+    flex-direction: column;
+    background:  #00405c;
+    width: 70px;
+    padding: 10px;
+    transition: 0.5s width ease-in-out;
+    height: 100%;
+    position: fixed;
+    border-right:#eeaa5c 3px solid;
+    color: white;
+    font-size: 12px;
+    font-family: Arial;
+    z-index: 10000;
+}
+.logo{
+    width: 100%;
+    height:50px;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-pequena{
+    width: auto;
+    height: 100%;
+}
+.logo-grande{
+    display: none;
+}
+
+.menu-nav{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.configuracoes{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 5px;
+    color: #96dfff;
+    border-radius: 50%;
+    border: 1px solid #96dfff;
+    transition: border-radius 0.5s ease-in-out;
+    cursor: pointer;
+}
+.configuracoes:hover{
+    border: 2px solid #96dfff ;
+}
+.reserva, .mesa, .usuario, .dashboard, .clientes, .relatorios, .sair{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    padding: 5px;
+    color: rgb(196, 196, 196);
+    border-radius: 50%;
+    border:none;
+    transition: border-radius 0.5s ease-in-out;
+    cursor: pointer;
+}
+.reserva:hover, .mesa:hover, .usuario:hover, .dashboard:hover, .clientes:hover, .relatorios:hover, .sair:hover{
+    border: 1px solid rgb(196, 196, 196) ;
+}
+.icone-name{
+    display: none;
+    text-align: center;
+    filter: opacity(0);
+    font-size: 14px;
+    font-family: Arial;
+    
+}
+.navegacao-lateral:hover{
+    width: 200px;
+    transition: 0.5s width ease-in-out;
+}
+.navegacao-lateral:hover .logo-grande{
+    display: block;
+    position: relative;
+    margin-top: 10px;
+    width: 50%;
+    height: 100%;
+
+}
+.navegacao-lateral:hover .configuracoes, .dashboard, .reserva, .mesa, .usuario, .clientes, .relatorios, .sair{
+    border-radius: 0;
+}
+.navegacao-lateral:hover .container-icone{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    width: 100%;
+}
+
+.navegacao-lateral:hover .icone-name{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    filter: opacity(1);
+}
+
+.icone{
+    display: flex;
+    width: 30px;
+    height: 30px;
+}
+section{
+    width: 100%;
+    margin: auto;
+    display: flex;
+}
+input{
+    border-radius: 10px;
+    border: none;
+    background-color: #dfdede;
+    padding: 5px;
+    width: 40px;
+    height: 20px;
+}
+select{
+    width: 150px;
+    height: 30px;
+    font-size: 15px;
+    font-family: Arial;
+}
+
+.container-configuracoes{
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+    width: 100%;
+    background-color: white;
+    padding: 30px;
+    padding-left: 100px;
+    padding-bottom: 300px;
+    font-family: Arial;
+    margin-top: 5rem;
+}
+.titulo{
+    color: #00608a;
+    font-size: 1.5rem;
+}
+
+.navegacao-topo{
+        display: none;
+}
+ /* Container fixo no canto inferior direito */
+.container-notificacoes {
+    position: fixed;
+    bottom: 30vh;
+    right: 30px;
+    display: flex;
+    flex-direction: column-reverse; /* Empilha as novas notificações para cima */
+    gap: 10px;
+    z-index: 9998;
+    pointer-events: none;
+}
+
+.modal-confirm,
+.modal-erro {
+    position: relative;
+    padding: 12px 20px;
+    font-family: Arial, sans-serif;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.314);
+    pointer-events: auto;
+    animation: pop-up-modal-aparecer 0.4s ease-in-out forwards;
+}
+
+.modal-confirm.saindo,
+.modal-erro.saindo {
+    animation: pop-up-modal-desaparecer 0.4s ease-in-out forwards;
+}
+
+.modal-confirm {
+    background-color: #0f9a00;
+    border-radius: 10px;
+}
+
+.modal-erro {
+    background-color: #d61900d8;
+    border-radius: 15px;
+}
+  .container-modal{
+    display:flex; flex-direction:column; 
+    min-width: 50%; 
+    background-color:#ececec; 
+    color:#00608a; 
+    padding:10px; 
+    border-radius:15px; 
+    border:2px solid #00608a; 
+    font-weight:400; 
+    box-shadow:0px 10px 15px  #00000036;
+    box-shadow: -5px 7px 7px rgba(0, 0, 0, 0.273);
+  }
+/* Título */
+
+/* Form / Grid de Cards */
+#configForm {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+/* Estrutura dos Cards */
+.config-card {
+  border-radius: 15px;
+  border-left: 3px var(--primary-light) solid;
+  border-bottom: 3px var(--primary-light) solid;
+  overflow: hidden;
+  box-shadow: -5px 10px 10px rgba(0, 0, 0, 0.303);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.config-card:hover {
+ box-shadow: -5px 10px 10px rgba(0, 0, 0, 0.46);
+  transform: translateY(-2px);
+}
+
+/* Cabeçalho do Card */
+.card-header {
+  background: var(--bg-main);
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-header i {
+  color: var(--accent-cyan);
+  font-size: 1.3rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+
+.card-header h2 {
+  font-size: 1.5rem;
+  color: var(--text-main);
+  margin-top: 20px;
+}
+
+/* Corpo do Card */
+.card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--bg-main);
+}
+
+/* Opções / Inputs */
+.opcao {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.opcao-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.opcao-desc {
+  font-size: 0.8rem;
+  color: #666666;
+  margin-bottom: 4px;
+}
+
+/* Inputs Gerais (Number, Time, Select) */
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="time"],
+input[type="date"],
+input[type="text"],
+select {
+  width: 100%;
+  height: 42px;
+  padding: 0 14px;
+  background-color: var(--input-bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+}
+
+input[type="number"]:focus,
+input[type="time"]:focus,
+input[type="date"]:focus,
+input[type="text"],
+select:focus {
+  border-color: var(--primary-light);
+  background-color: var(--card-bg);
+  box-shadow: 0 0 0 3px rgba(0, 117, 167, 0.15);
+}
+
+.editar-credenciais{
+  color: blue;
+}
+.editar-credenciais:hover{
+  cursor: pointer;
+   text-decoration:underline;
+}
+
+
+/* Prefixo / Sufixo de Input (R$, dias, min, hrs) */
+.input-suffix, 
+.input-prefix {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input-suffix input {
+  padding-right: 70px;
+}
+
+.input-suffix span {
+  position: absolute;
+  right: 14px;
+  font-size: 0.85rem;
+  color: #666666;
+  font-weight: 600;
+  pointer-events: none;
+}
+
+.input-prefix input {
+  padding-left: 45px;
+}
+
+.input-prefix span {
+  position: absolute;
+  left: 14px;
+  font-size: 0.9rem;
+  color: #666666;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+/* Grid Dias da Semana */
+.dias-semana-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  gap: 20px;
+  margin-top: 6px;
+}
+
+.dia-item {
+  position: relative;
+  border: 2px var(--border-subtle) solid;
+  border-radius: 10px;
+  padding: 10px;
+
+}
+
+.dia-item input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.dia-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  background-color: var(--bg-main);
+  border: 1.5px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+.dia-item input[type="checkbox"]:checked + .dia-label {
+  background-color: var(--primary-medium);
+  color: var(--text-light);
+  border-color: var(--primary-medium);
+  box-shadow: 0 2px 6px rgba(0, 96, 138, 0.25);
+}
+.container-horarios{
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+}
+
+.container-feriados-grid{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 20px;
+  margin-top: 6px;
+}
+.container-feriados{
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  gap: 10px;
+  text-wrap: nowrap;
+}
+.container-feriados div{
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 10px;
+}
+.feriado-item{
+  min-width: 150px;
+  border: 2px var(--border-subtle) solid;
+  border-radius: 10px;
+  padding: 10px;
+}
+.adicionar-feriado{
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  color: #00608a;
+  width: 100%;
+  height: 50px;
+  background: rgb(224, 224, 224);
+  margin-top: 10px;
+  font-size: 30px;
+}
+.remover-feriado{
+  padding: 10px 10px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  color: #00608a;
+  width: 30px;
+  height: 30px;
+  background: rgb(212, 212, 212);
+}
+.remover-feriado:hover{
+  background-color: #004765;
+  color: white;
+}
+
+.adicionar-feriado:hover{
+  background-color: #004765;
+  color: white;
+}
+
+
+/* Toggle Switch (Chave Liga/Desliga) */
+.switch-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e1;
+  transition: 0.3s;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
+  background-color: var(--card-bg);
+  transition: 0.3s;
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+input:checked + .slider {
+  background-color: var(--primary-medium);
+}
+
+input:checked + .slider:before {
+  transform: translateX(22px);
+}
+
+/* Barra de Ações (Salvar / Restaurar) */
+.actions-bar {
+  position: sticky;
+  bottom: 20px;
+  background: #00405c;
+  backdrop-filter: blur(8px);
+  padding: 16px 24px;
+  border-radius: 12px;
+  border:2px solid var(--accent-gold);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  z-index: 1;
+  margin-top: 10px;
+}
+
+.btn-secondary,
+.btn-primary {
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.btn-secondary {
+  background-color: var(--input-bg);
+  color: var(--text-main);
+  border: 1.5px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  background-color: #d1d0d0;
+}
+
+.btn-primary {
+  background-color: var(--accent-gold);
+  color: var(--text-light);
+  box-shadow: 0 4px 6px rgba(0, 117, 167, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: #cd914c;
+  transform: translateY(-1px);
+}
+
+.btn-alterar{
+  background: var(--primary-medium);
+}
+.btn-alterar:hover{
+  background: var(--primary-dark);
+}
+.container-navegacao{
+    display: flex;
+    justify-content: space-between;
+    width: 100%; 
+}
+.menu{
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: flex;
+    pointer-events: none;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+    padding: 10px;
+     opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    background-color: #00405c;
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
+    border-bottom: 2px orange solid;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.303);
+    z-index: 9999;
+}
+.ativo{
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(55px);
+    pointer-events:all;
+}
+.container-open-menu{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.btn-menu{
+    width: 35px;
+    height: 35px;
+    background-color: transparent;
+}
+
+.erro{
+    color: red;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 2px;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
+@media (max-width: 768px) {
+  .container-configuracoes {
+    padding: 20px;
+    margin-top: 5rem;
+  }
+
+  .dias-semana-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  }
+
+  .actions-bar {
+    flex-direction: column-reverse;
+    bottom: 10px;
+  }
+
+  .btn-secondary,
+  .btn-primary {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+
+@media (max-width: 768px) {
+    header{
+        background-color: #00405c;
+        border-bottom: 2px orange solid;
+        height: auto;
+        box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.303);
+        min-height: 30px;
+    }
+    .container-configuracoes{
+        padding: 20px;
+        padding-top: 50px;
+    }
+    .navegacao-lateral{
+        display: none;
+    }
+    .navegacao-topo{
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        width: 100%;
+        padding: 5px;
+        justify-content: space-between;
+        height: auto;
+        margin: 0;
+    }
+    .header-navegacao{
+        display: none;
+    }
+    .menu-nav{
+        display: flex;
+        flex-direction: row;
+    }
+    .logo{
+        width: auto;
+        padding: 0;
+        margin: 0;
+    }
+    .reserva:hover, .mesa:hover, .clientes:hover, .dashboard:hover, .configuracoes:hover, .relatorios:hover, .sair:hover, .usuario:hover{
+   border-radius: 50%;
+}
+.logo-grande{
+    display: block;
+    width: auto;
+    height: 100%;
+}
+.logo-pequena{
+    display: none;
+}
+}

@@ -1,0 +1,173 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --cor-fundo: #ececec;
+    --cor-card: #ffffff;
+    --cor-texto-principal: #1e293b;
+    --cor-texto-secundario: #64748b;
+    --cor-borda-container: #064c8a;
+    --cor-primaria: orange; /* Verde Manguezal */
+    --cor-primaria-hover: rgb(166, 108, 0);
+    --cor-secundaria: #f1f5f9;
+    --cor-secundaria-hover: #e2e8f0;
+    --cor-borda: #e2e8f0;
+
+    /* Status */
+    --borda-sucesso: #2e7d32;
+    --borda-alerta: #ed6c02;
+    --borda-erro: #d32f2f;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--cor-fundo);
+    color: var(--cor-texto-principal);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+main {
+    width: 100%;
+    max-width: 600px;
+}
+
+/* ==========================================================
+   CARTÃO DE CONFIRMAÇÃO
+   ========================================================== */
+.confirmacao {
+    background-color: var(--cor-card);
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow: -5px 10px 15px rgba(0, 0, 0, 0.306);
+    border-left: 6px solid var(--cor-borda-container);
+    border-bottom: 6px solid var(--cor-borda-container);
+    animation: surgimento 0.4s ease-out;
+    transition: transform 0.4s ease-out;
+}
+.confirmacao:hover{
+    transform: scale(1.05);
+    transition: transform 0.4s ease-in;
+}
+
+/* Tipos de bordas por status */
+.confirmacao.status-sucesso { border-top-color: var(--borda-sucesso); }
+.confirmacao.status-alerta { border-top-color: var(--borda-alerta); }
+.confirmacao.status-erro { border-top-color: var(--borda-erro); }
+
+.confirmacao h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--cor-texto-principal);
+    margin-bottom: 16px;
+    line-height: 1.3;
+}
+
+.confirmacao h2 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--cor-texto-principal);
+    margin-top: 24px;
+    margin-bottom: 8px;
+}
+
+.confirmacao p {
+    color: var(--cor-texto-secundario);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+}
+
+/* Bloco de destaque para a nota */
+.alerta-nota {
+    background-color: #f8fafc;
+    border-left: 4px solid #94a3b8;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    color: var(--cor-texto-secundario);
+    margin: 20px 0;
+}
+
+/* ==========================================================
+   BOTÕES E AÇÕES
+   ========================================================== */
+.opcoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 32px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    flex: 1;
+    min-width: 140px;
+    text-align: center;
+}
+
+.btn-principal {
+    background-color: var(--cor-primaria);
+    color: #ffffff;
+}
+
+.btn-principal:hover {
+    background-color: var(--cor-primaria-hover);
+    transform: translateY(-1px);
+}
+
+.btn-secundario {
+    background-color: var(--cor-secundaria);
+    color: var(--cor-texto-principal);
+    border: 1px solid var(--cor-borda);
+}
+
+.btn-secundario:hover {
+    background-color: var(--cor-secundaria-hover);
+}
+
+/* ==========================================================
+   ANIMAÇÃO E RESPONSIVIDADE
+   ========================================================== */
+@keyframes surgimento {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 480px) {
+    .confirmacao {
+        padding: 24px 20px;
+    }
+
+    .confirmacao h1 {
+        font-size: 1.3rem;
+    }
+
+    .opcoes {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}

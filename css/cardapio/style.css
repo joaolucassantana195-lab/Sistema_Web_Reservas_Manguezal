@@ -1,0 +1,502 @@
+:root {
+  /* Cores Principais */
+  --color-primary: #00405c;
+  --color-primary-dark: #001924;
+  --color-primary-light: #00628b;
+
+  /* Cores de Destaque (Accent) */
+  --color-accent: #eeaa5c;
+  --color-accent-hover: #ff8800;
+  --color-accent-alt: #fca311;
+
+  /* Cores de Texto e Fundo */
+  --color-text-light: #ffffff;
+  --color-text-dark: #2d3748;
+  --color-bg-light: #ececec;
+
+  /* Fontes */
+  --font-main: "Varela Round", sans-serif;
+  --font-cursive: "Playwrite NZ Basic", cursive;
+
+  /* Efeitos e Raios */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 30px;
+  --transition-fast: 0.2s ease-in-out;
+  --transition-normal: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* Design System — Redesign Manguezal */
+  --rm-deep: #063b3d;
+  --rm-deep-2: #082a2c;
+  --rm-ocean: #0c6870;
+  --rm-sea: #15939a;
+  --rm-sand: #f2dfbd;
+  --rm-gold: #d9a441;
+  --rm-gold-light: #f0c66b;
+  --rm-cream: #fbf8f1;
+  --rm-white: #ffffff;
+  --rm-ink: #183335;
+  --rm-muted: #657779;
+  --rm-shadow: 0 18px 45px rgba(0, 35, 36, 0.16);
+  --rm-shadow-hover: 0 25px 60px rgba(0, 35, 36, 0.24);
+  --rm-radius: 22px;
+  --rm-radius-sm: 14px;
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: auto;
+    margin: 0;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 76px;
+  padding: 12px clamp(20px, 5vw, 80px);
+  background: linear-gradient(to bottom, rgb(0, 0, 0), #031723);
+  color: var(--color-text-light);
+  position: fixed;
+  z-index: 3;
+  transition: background 0.3s ease, height 0.3s ease;
+  border-bottom: 2px orange solid;
+}
+
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: auto;
+  text-align: center;
+}
+
+nav div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+nav div a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+nav div a:hover {
+  color: var(--color-accent-hover);
+}
+
+.links {
+  display: flex;
+  justify-content: flex-end;
+  gap: clamp(18px, 3vw, 42px);
+  width: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+  font-weight: 400;
+}
+
+.links a, .links-menu a {
+  position: relative;
+  padding: 8px 0;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.links a:hover, .links-menu a:hover {
+  color: #fff;
+}
+
+.links a::after, .links-menu a::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 2px;
+  background-color: var(--rm-gold-light);
+  border-radius: 999px;
+  transition: width var(--transition-fast);
+}
+
+.links a:hover::after, .links-menu a:hover::after {
+  width: 100%;
+}
+
+.logo-header {
+  display: none;
+}
+
+.welcome-header {
+  display: block;
+}
+
+/* Offcanvas / Mobile Menu */
+.menu {
+  display: none;
+}
+
+.btn-menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff81;
+  border: none;
+  border-radius: 5px;
+  width: 100%;
+  height: auto;
+}
+
+.offcanvas-body {
+  background-color: #fff;
+  width: 100%;
+  min-height: 100vh;
+  text-align: center;
+}
+
+#links-menu {
+  font-weight: 600;
+  font-size: 17px;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+  text-align: center;
+  list-style-type: none;
+  margin: 0;
+}
+
+.links-menu a {
+  color: var(--color-primary-dark);
+  font-size: 20px;
+}
+
+
+section{
+    width: 100%;
+    height: auto;
+    color: #00405c;
+    background-color: #feffff;
+}
+
+main{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+h2{
+    text-align: center;
+    margin: 100px;
+}
+
+.cardapio-container {
+  padding: 80px 5%;
+  background-color: #f8fafc;
+  margin-top: 80px;
+}
+
+.cardapio-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.cardapio-header h2 {
+  font-size: 2.2rem;
+  color: #0d3b4c; 
+  margin-bottom: 10px;
+  text-wrap: nowrap;
+}
+
+.cardapio-header p {
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+
+.buffet-banner {
+  background: linear-gradient(135deg, #0d3b4c, #1a5b70);
+  color: #ffffff;
+  padding: 25px 35px;
+  border-radius: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 20px rgba(13, 59, 76, 0.15);
+}
+
+.tag-horario {
+  background-color: #fca311; /* Laranja de destaque */
+  color: #ffffff;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.buffet-info h3 {
+  font-size: 1.6rem;
+  margin: 10px 0 5px 0;
+}
+
+.buffet-preco {
+  text-align: right;
+}
+
+.buffet-preco span {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #00d2b5;
+}
+
+/* Grid de Destaques */
+.destaques-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+  margin-bottom: 40px;
+}
+
+.card-destaque {
+  background: #ffffff;
+  padding: 30px 25px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-destaque:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.card-icone {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.card-destaque h3 {
+  color: #0d3b4c;
+  margin-bottom: 10px;
+}
+
+.card-destaque p {
+  color: #64748b;
+  font-size: 0.95rem;
+  margin-bottom: 15px;
+  line-height: 1.5;
+}
+
+.preco-apartir {
+  display: inline-block;
+  font-weight: 600;
+  color: #fca311;
+  font-size: 0.9rem;
+}
+
+/* Botão PDF (CTA) */
+.cardapio-cta {
+  text-align: center;
+}
+
+.btn-pdf {
+  display: inline-block;
+  background-color: #fca311; /* Laranja do botão */
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 16px 32px;
+  border-radius: 50px;
+  text-decoration: none;
+  box-shadow: 0 4px 15px rgba(252, 163, 17, 0.4);
+  transition: all 0.3s ease;
+}
+
+.btn-pdf:hover {
+  background-color: #e89200;
+  transform: scale(1.03);
+}
+/* Container Principal do Footer */
+.site-footer {
+   background:
+    radial-gradient(circle at 15% 10%, #062d45, transparent 30%),
+    #031723;
+  color: #cbd5e1;
+  padding: 60px 5% 20px 5%;
+  font-size: 0.95rem;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+/* Títulos das Colunas */
+.footer-logo {
+  color: #ffffff;
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+}
+
+.footer-coluna h4 {
+  color: #ffffff;
+  font-size: 1.1rem;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.footer-coluna h4::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 2px;
+  background-color: #fca311; /* Laranja da marca */
+  margin-top: 8px;
+}
+
+.footer-descricao {
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* Links do Menu */
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 10px;
+}
+
+.footer-links a {
+  color: #cbd5e1;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: #fca311;
+}
+
+/* Redes Sociais */
+.footer-redes {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-redes a {
+  color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.1);
+  padding: 8px 14px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: background-color 0.3s ease;
+}
+
+.footer-redes a:hover {
+  background-color: #fca311;
+}
+
+.footer-coluna p {
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.contato-email{
+  word-break: break-all;
+}
+
+.footer-coluna strong {
+  color: #ffffff;
+}
+
+/* Linha Final de Créditos */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 20px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #94a3b8;
+}
+
+
+
+/* Responsividade (Celular) */
+@media (max-width: 768px) {
+  header {
+    height: 64px;
+    padding: 10px 16px;
+  }
+  nav{
+    justify-content: space-between;
+  }
+
+  nav div a {
+    font-size: 13px;
+  }
+  .logo-header{
+    display: block;
+    width:  25px;
+    height: auto;
+  }
+  .welcome-header{
+    display: none;
+  }
+  .links{
+    display: none;
+  }
+  .menu{
+    display: block;
+  }
+  .buffet-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+  
+  .buffet-preco {
+    text-align: center;
+  }
+  .cardapio-header h2 {
+    justify-content: center;
+    display: flex;
+    text-align: center;
+    font-size: 2.2rem;
+  }
+  .footer-coluna .footer-logo{
+    margin-left: 0px;
+  }
+  .container-footer-logo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.footer-coluna .footer-logo{
+    margin-left: 0px;
+  }
+  .container-footer-logo{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+}
+

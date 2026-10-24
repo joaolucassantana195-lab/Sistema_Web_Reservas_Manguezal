@@ -1,0 +1,8 @@
+vendor/
+.env
+.env.local
+*.log
+storage/*.key
+bootstrap/cache/*.php
+.DS_store
+Thumbs.db

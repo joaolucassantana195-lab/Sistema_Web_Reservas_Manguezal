@@ -1,0 +1,17 @@
+<?php
+$host = 'mysql-restaurante-manguezal.alwaysdata.net';
+$user = 'restaurante-manguezal';
+$pass = 'sisresmang26';
+$db = 'restaurante-manguezal_sistema_reservas';
+
+try{
+    $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8mb4", $user, $pass);
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+   
+
+}catch(PDOException $e){
+    die(header("Location: confirmacao.php?status=server_error"));
+}
+
+?>
+

@@ -45,7 +45,17 @@ try {
         $sql .= ' WHERE ' . implode(' AND ', $where);
     }
 
-    $sql .= ' ORDER BY r.Data DESC, r.Horario ASC, r.Status ASC, c.Nome ASC';
+    $sql .= ' ORDER BY
+    CASE r.Status
+    WHEN "Em Atendimento" THEN 1
+    WHEN "Confirmada" THEN 2
+    WHEN "Aguardando" THEN 3
+    WHEN "Concluída" THEN 4
+    WHEN "Não compareceu" THEN 5
+    WHEN "Cancelada" THEN 6
+    ELSE 7
+    END ASC,
+    r.Data DESC, r.Horario ASC, c.Nome ASC';
 
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);

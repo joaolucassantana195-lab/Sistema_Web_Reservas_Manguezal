@@ -29,10 +29,10 @@ try {
         AND r.Status IN ('Aguardando' , 'Confirmada', 'Em Atendimento', 'Concluída')
         ORDER BY
         CASE r.Status
-        WHEN "Em Atendimento" THEN 1
-        WHEN "Confirmada" THEN 2
-        WHEN "Aguardando" THEN 3
-        WHEN "Concluída" THEN 4
+        WHEN 'Em Atendimento' THEN 1
+        WHEN 'Confirmada' THEN 2
+        WHEN 'Aguardando' THEN 3
+        WHEN 'Concluída' THEN 4
         ELSE 5
         AS ASC,
         r.Horario ASC

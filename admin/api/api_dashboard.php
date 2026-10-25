@@ -34,7 +34,7 @@ try {
         WHEN 'Aguardando' THEN 3
         WHEN 'Concluída' THEN 4
         ELSE 5
-        AS ASC,
+        END ASC,
         r.Horario ASC
     ");
 

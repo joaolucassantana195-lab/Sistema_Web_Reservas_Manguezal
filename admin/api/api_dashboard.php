@@ -28,7 +28,7 @@ try {
         WHERE r.Data = :dataHoje 
         AND r.Status IN ('Aguardando' , 'Confirmada', 'Em Atendimento', 'Concluída')
         ORDER BY
-        CASE r.status
+        CASE r.Status
         WHEN "Em Atendimento" THEN 1
         WHEN "Confirmada" THEN 2
         WHEN "Aguardando" THEN 3

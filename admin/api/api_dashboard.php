@@ -27,7 +27,15 @@ try {
         LEFT JOIN mesa m ON  r.FK_Mesa_ID_Mesa = m.ID_mesa
         WHERE r.Data = :dataHoje 
         AND r.Status IN ('Aguardando' , 'Confirmada', 'Em Atendimento', 'Concluída')
-        ORDER BY r.Horario ASC
+        ORDER BY
+        CASE r.status
+        WHEN "Em Atendimento" THEN 1
+        WHEN "Confirmada" THEN 2
+        WHEN "Aguardando" THEN 3
+        WHEN "Concluída" THEN 4
+        ELSE 5
+        AS ASC,
+        r.Horario ASC
     ");
 
     $stmt->execute([':dataHoje' => $data]);

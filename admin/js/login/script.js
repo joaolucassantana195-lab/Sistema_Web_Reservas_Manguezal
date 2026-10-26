@@ -4,8 +4,11 @@ let span = document.querySelector('span')
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();
-    e.target.textContent = "Entrando..."
-    e.target.disabled = true
+    const submitBtn = e.submitter;
+    
+    submitBtn.textContent = "Entrando...";
+    submitBtn.disabled = true;
+    
     const iptEmail = document.querySelector('#email').value;
     const iptSenha = document.querySelector('#senha').value;
        
@@ -24,12 +27,13 @@ form.addEventListener('submit', (e) => {
                 span.textContent = data.mensagem
             }else{
                 span.textContent = data.mensagem
-                e.target.textContent = "Efetuar Login"
-                e.target.disabled = false
+                submitBtn.textContent = "Efetuar Login";
+                submitBtn.disabled = false;
             }
         }).catch(error => {
-            e.target.textContent = "Efetuar Login"
-            e.target.disabled = false
+            submitBtn.textContent = "Efetuar Login";
+            submitBtn.disabled = false;
+    
             console.error('Erro na requisição');
         });
 })

@@ -44,11 +44,11 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
 
     <!-- Conteúdo Principal -->
     <div style="padding: 30px; background: #f9f9f9;">
-        <h2 style="color: #207711; margin-top: 0;">Reserva Confirmada!</h2>
+        <h2 style="color: #0d3b5e; margin-top: 0;">Reserva Confirmada!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Sua reserva foi confirmada com sucesso.</p>
 
         <!-- Container da Reserva -->
-        <div style="color: #022a55; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #0d3b5e; border-bottom: 4px solid #0d3b5e;">
+        <div style="color: #022a55; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #207711; border-bottom: 4px solid #207711;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top">
@@ -58,9 +58,7 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
                         <p style="margin: 5px 0;"><strong>🪑 Mesa:</strong> {$mesa}</p>
                         <p style="margin: 5px 0;"><strong>🏖️ Beach Club:</strong> {$beach}</p>
                     </td>
-                    <td align="right" valign="bottom" width="40">
-                        <img src="https://restaurante-manguezal.alwaysdata.net/images/coqueiro-manquezal-logo.png" alt="logo" style="width: 40px; display: block;">
-                    </td>
+                   
                 </tr>
             </table>
         </div>
@@ -187,11 +185,11 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
 
     <!-- Conteúdo Principal -->
     <div style="padding: 30px; background: #f9f9f9;">
-        <h2 style="color: #fd0404; margin-top: 0;">Reserva Cancelada!</h2>
+        <h2 style="color: #0d3b5e; margin-top: 0;">Reserva Cancelada!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Sua reserva foi <strong style="color:#fd0404;">cancelada</strong>.</p>
 
         <!-- Container da Reserva -->
-        <div style="color: #000000; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #a41111; border-bottom: 4px solid #a41111;">
+        <div style="color: #000000; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #fd0404; border-bottom: 4px solid #fd0404;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top">
@@ -201,9 +199,7 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
                         <p style="margin: 5px 0;"><strong>🪑 Mesa: S/N </p>
                         <p style="margin: 5px 0;"><strong>🏖️ Beach Club:</strong> {$beach}</p>
                     </td>
-                    <td align="right" valign="bottom" width="40">
-                        <img src="https://restaurante-manguezal.alwaysdata.net/images/coqueiro-manquezal-logo.png" alt="logo" style="width: 40px; display: block;">
-                    </td>
+                   
                 </tr>
             </table>
         </div>
@@ -287,7 +283,7 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
 
     
     <div style="padding: 30px; background: #ececec;">
-        <h2 style="color: #ffae00;; margin-top: 0;">Não esqueça da sua reserva!</h2>
+        <h2 style="color: #0d3b5e; margin-top: 0;">Não esqueça da sua reserva!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Você possui uma reserva <strong style="color: #20ac00;">confirmada</strong>.</p>
 
         
@@ -300,9 +296,6 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
                         <p style="margin: 5px 0;"><strong>👥 Pessoas:</strong> {$pessoas}</p>
                         <p style="margin: 5px 0;"><strong>🪑 Mesa: {$mesa} </p>
                         <p style="margin: 5px 0;"><strong>🏖️ Beach Club:</strong> {$beach}</p>
-                    </td>
-                    <td align="right" valign="bottom" width="40">
-                        <img src="https://restaurante-manguezal.alwaysdata.net/images/coqueiro-manquezal-logo.png" alt="logo" style="width: 40px; display: block;">
                     </td>
                 </tr>
             </table>

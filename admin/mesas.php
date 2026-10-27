@@ -243,8 +243,7 @@ if (empty($_SESSION['usuario_logado'])) {
                                     <p>Localização: </p>
                                     <select id="localizacaoMesa">
                                         <option value="beach">Beach Club</option>
-                                        <option value="deck" selected>Deck</option>
-                                        <option value="salão">Salão Principal</option>
+                                        <option value="Área aberta" selected>Área aberta</option>
                                     </select>
 
                                 </div>
@@ -275,10 +274,8 @@ if (empty($_SESSION['usuario_logado'])) {
                             <p>Local</p>
                             </p> <select name="local" id="local">
                                 <option value="Selecione um local" default>Selecione um local</option>
-                                <option value="deck">deck</option>
-                                <option value="beach">beach</option>
-                                <option value="salão">salão</option>
-                                
+                                <option value="Área aberta">Área aberta</option>
+                                <option value="beach">Beach Club</option>
                             </select>
                         </div>  
                         </div>

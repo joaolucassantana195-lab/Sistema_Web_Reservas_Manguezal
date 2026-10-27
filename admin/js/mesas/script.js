@@ -452,8 +452,7 @@ function iterarMesas() {
                 <label style="display:flex; align-items:center; cursor:pointer; font-size:15px;">Localização:</label>
                 <select id="iteracao-local" style="width:100%; height:34px;">
                     <option value="beach">Beach Club</option>
-                    <option value="deck" selected>Deck</option>
-                    <option value="salão">Salão Principal</option>
+                    <option value="áreaAberta" selected>Área aberta</option>
                 </select>
                 <span id="spn-err" style="color:red; font-size:14px; font-weight:400; min-height:18px;"></span>
             </div>

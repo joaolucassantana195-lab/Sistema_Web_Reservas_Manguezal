@@ -20,7 +20,7 @@ $params = [
 ];
 
 // Filtros dinâmicos
-if (!empty($local) && in_array($local, ['beach', 'deck', 'salão'], true)) {
+if (!empty($local) && in_array($local, ['beach', 'Área aberta'], true)) {
     $where[] = 'm.localizacao = :local';
     $params[':local'] = $local;
 }

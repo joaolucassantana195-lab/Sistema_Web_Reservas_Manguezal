@@ -254,7 +254,8 @@ section{
 }
 
 .card-total h3, .card-aguardando h3, .card-confirmadas h3, .card-previsao h3{
-    font-size: 1.3rem
+    font-size: 1.3rem;
+    font-weight: bold;
 }
 .content-total, .content-aguardando, .content-confirmadas, .content-previsao{
     display: flex;

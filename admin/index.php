@@ -20,10 +20,11 @@
                 </div>
                 <h1 class="varela-round-regular">Login</h1>
                 <form class="varela-round-regular">
-                    <label for="Email">Email</label>
-                    <input type="text" name="email" id="email" placeholder="Digite seu email">
+                    <label for="Email">Acesso</label>
+                    <input type="text" name="email" id="email" placeholder="Digite seu acesso">
                     <label for="Senha">Senha</label>
                     <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
+                    <span onclick="esqueceuSenha(event)" class="spn-redefinir">Esqueci a senha</span>
                     <span></span>
                     <button class="varela-round-regular" type="submit">Efetuar Login</button>
                 </form>

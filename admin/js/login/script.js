@@ -37,3 +37,7 @@ form.addEventListener('submit', (e) => {
             console.error('Erro na requisição');
         });
 })
+
+function esqueceuSenha(e){
+    window.location.href = 'enviar_token.php'
+}

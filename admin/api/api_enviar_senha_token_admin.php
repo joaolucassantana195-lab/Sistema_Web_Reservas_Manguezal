@@ -37,6 +37,11 @@ try {
         exit;
     }
 
+    if($usuario['tipo_perfil'] !== 'admin'){
+         echo json_encode(['sucesso' => false, 'mensagem' => 'Somente o administrador tem permissao para alterar a senha.']);
+        exit;
+    }
+
 
     $token = bin2hex(random_bytes(32));
     

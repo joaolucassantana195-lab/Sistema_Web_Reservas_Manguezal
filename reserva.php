@@ -518,7 +518,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  WHERE Capacidade_max >= :pessoas
                    AND ativa = 1
                    AND Status = "Livre"
-                   AND localizacao = "beach"
+                   AND localizacao = "Beach Club"
                    AND ID_mesa NOT IN (
                        SELECT FK_Mesa_ID_Mesa
                        FROM reserva
@@ -540,7 +540,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                  WHERE Capacidade_max >= :pessoas
                    AND ativa = 1
                    AND Status = "Livre"
-                   AND localizacao IN ("deck", "salão")
+                   AND localizacao = "Área aberta"
                    AND ID_mesa NOT IN (
                        SELECT FK_Mesa_ID_Mesa
                        FROM reserva

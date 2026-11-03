@@ -1,6 +1,6 @@
 //tratamento de erro formulario
 let form = document.querySelector('form')
-let span = document.querySelector('span')
+let span = document.querySelector('.spn-erro')
 
 form.addEventListener('submit', (e) => {
     e.preventDefault();

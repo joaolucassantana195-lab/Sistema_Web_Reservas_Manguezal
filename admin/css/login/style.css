@@ -22,7 +22,7 @@ h1{
     text-align: center;
     color: white;
 }
-span{
+.spn-erro{
     color: rgb(255, 63, 63);
     font-size: 15px;
     padding: 5px;

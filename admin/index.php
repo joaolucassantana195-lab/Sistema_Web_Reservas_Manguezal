@@ -25,7 +25,7 @@
                     <label for="Senha">Senha</label>
                     <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
                     <span onclick="esqueceuSenha(event)" class="spn-redefinir">Esqueci a senha</span>
-                    <span></span>
+                    <span class="spn-erro"></span>
                     <button class="varela-round-regular" type="submit">Efetuar Login</button>
                 </form>
             </div>

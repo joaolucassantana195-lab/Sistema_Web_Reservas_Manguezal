@@ -25,7 +25,7 @@ function criarInstanciaMailer() {
     return $mail;
 }
 
-function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach){
+function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach, $contatoRestaurante, $contatoEmail){
 
     $regras = json_decode($regrasJson, true);
     $htmlRegras = '';
@@ -109,7 +109,7 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
         <!-- Botão WhatsApp -->
         <div style="text-align: center; margin-top: 40px;">
             <p style="margin-bottom: 20px;">Em caso de dúvidas e cancelamento, entre em contato pelo whatsapp.</p>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
         </div>
 
         <p style="color: #888888; font-size: 12px; margin-top: 50px; text-align: center;">Restaurante Manguezal — Itaparica, BA</p>
@@ -128,7 +128,7 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
             <a href="https://instagram.com/restaurantemanguezal" target="_blank" style="text-decoration: none; margin-right: 10px;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/instagramlogo.png" alt="Instagram">
             </a>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/whatsapplogo.png" alt="Whatsapp">
             </a>
         </div>
@@ -140,8 +140,8 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
 
         <h4 style="margin-bottom: 10px; color: #ffffff;">Onde Estamos</h4>
         <p style="margin: 5px 0; font-size: 0.9rem;">📍 R. A, 383-343 - Lot. Nova Itaparica</p>
-        <p style="margin: 5px 0; font-size: 0.9rem;">📞 (71) 9712-9517</p>
-        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ contato.restaurante.manguezal@gmail.com</p>
+        <p style="margin: 5px 0; font-size: 0.9rem;">📞 {$contatoRestaurante}</p>
+        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ {$contatoEmail}</p>
 
         <div style="border-top: 1px solid #144353; padding-top: 15px; margin-top: 20px;">
             <p style="font-size: 0.8rem; margin: 0;">&copy; 2026 Restaurante Manguezal. Todos os direitos reservados.</p>
@@ -161,7 +161,7 @@ HTML;
     }
 }
 
-function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $pessoas, $beach, $motivo){
+function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $pessoas, $beach, $motivo, $contatoRestaurante, $contatoEmail){
     
     $mail = criarInstanciaMailer();
 
@@ -200,7 +200,7 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
                         <p style="margin: 5px 0;"><strong>📅 Data:</strong> {$data}</p>
                         <p style="margin: 5px 0;"><strong>🕐 Horário:</strong> {$horario}</p>
                         <p style="margin: 5px 0;"><strong>👥 Pessoas:</strong> {$pessoas}</p>
-                        <p style="margin: 5px 0;"><strong>🪑 Mesa: S/N </p>
+                        <p style="margin: 5px 0;"><strong>🪑 Mesa: S/N</strong> </p>
                         <p style="margin: 5px 0;"><strong>🏖️ Beach Club:</strong> {$beach}</p>
                     </td>
                    
@@ -220,7 +220,7 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
         <!-- Botão WhatsApp -->
         <div style="text-align: center; margin-top: 40px;">
             <p style="margin-bottom: 20px;">Em caso de dúvidas, entre em contato pelo whatsapp.</p>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
         </div>
 
         <p style="color: #888888; font-size: 12px; margin-top: 50px; text-align: center;">Restaurante Manguezal — Itaparica, BA</p>
@@ -239,7 +239,7 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
             <a href="https://instagram.com/restaurantemanguezal" target="_blank" style="text-decoration: none; margin-right: 10px;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/instagramlogo.png" alt="Instagram">
             </a>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/whatsapplogo.png" alt="Whatsapp">
             </a>
         </div>
@@ -251,8 +251,8 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
 
         <h4 style="margin-bottom: 10px; color: #ffffff;">Onde Estamos</h4>
         <p style="margin: 5px 0; font-size: 0.9rem;">📍 R. A, 383-343 - Lot. Nova Itaparica</p>
-        <p style="margin: 5px 0; font-size: 0.9rem;">📞 (71) 9712-9517</p>
-        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ contato.restaurante.manguezal@gmail.com</p>
+        <p style="margin: 5px 0; font-size: 0.9rem;">📞 {$contatoRestaurante}</p>
+        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ {$contatoEmail}</p>
 
         <div style="border-top: 1px solid #144353; padding-top: 15px; margin-top: 20px;">
             <p style="font-size: 0.8rem; margin: 0;">&copy; 2026 Restaurante Manguezal. Todos os direitos reservados.</p>
@@ -272,7 +272,7 @@ HTML;
     }
 }
 
-function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach){
+function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach, $contatoRestaurante, $contatoEmail){
 
     $regras = json_decode($regrasJson, true);
     $htmlRegras = '';
@@ -353,7 +353,7 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
         <!-- Botão WhatsApp -->
         <div style="text-align: center; margin-top: 40px;">
             <p style="margin-bottom: 20px;">Em caso de dúvidas, entre em contato pelo whatsapp.</p>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" style="color: #ffffff; text-decoration: none; background-color: #ff9100; padding: 12px 24px; border-radius: 20px; font-size: 18px; display: inline-block;">Entrar em contato</a>
         </div>
 
         <p style="color: #888888; font-size: 12px; margin-top: 50px; text-align: center;">Restaurante Manguezal — Itaparica, BA</p>
@@ -372,7 +372,7 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
             <a href="https://instagram.com/restaurantemanguezal" target="_blank" style="text-decoration: none; margin-right: 10px;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/instagramlogo.png" alt="Instagram">
             </a>
-            <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
+            <a href="https://api.whatsapp.com/send/?phone={$contatoRestaurante}&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" style="text-decoration: none;">
                 <img style="width: 35px; vertical-align: middle;" src="https://restaurante-manguezal.alwaysdata.net/images/whatsapplogo.png" alt="Whatsapp">
             </a>
         </div>
@@ -384,8 +384,8 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
 
         <h4 style="margin-bottom: 10px; color: #ffffff;">Onde Estamos</h4>
         <p style="margin: 5px 0; font-size: 0.9rem;">📍 R. A, 383-343 - Lot. Nova Itaparica</p>
-        <p style="margin: 5px 0; font-size: 0.9rem;">📞 (71) 9712-9517</p>
-        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ contato.restaurante.manguezal@gmail.com</p>
+        <p style="margin: 5px 0; font-size: 0.9rem;">📞 {$contatoRestaurante}</p>
+        <p style="margin: 5px 0 30px 0; font-size: 0.9rem;">✉️ {$contatoEmail}</p>
 
         <div style="border-top: 1px solid #144353; padding-top: 15px; margin-top: 20px;">
             <p style="font-size: 0.8rem; margin: 0;">&copy; 2026 Restaurante Manguezal. Todos os direitos reservados.</p>

@@ -199,6 +199,8 @@ if ($idReserva && $novoStatus){
                                 $dadosReserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não',
                                 $config['regras_restaurante'],
                                 $config['taxa_pessoa_beach_club'],
+                                $config['contato_restaurante'],
+                                $config['contato_email']
                             );
 
                             $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');
@@ -233,7 +235,9 @@ if ($idReserva && $novoStatus){
                                 $horarioReserva,
                                 $dadosReserva['QTD_pessoas'],
                                 $dadosReserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não',
-                                $motivo
+                                $motivo,
+                                $config['contato_restaurante'],
+                                $config['contato_email']
                             );
                         }
                     }

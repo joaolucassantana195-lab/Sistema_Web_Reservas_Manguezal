@@ -30,7 +30,9 @@ try {
             config.horario_fechamento,
             config.enviar_email_lembrete,
             config.regras_restaurante,
-            config.taxa_pessoa_beach_club
+            config.taxa_pessoa_beach_club,
+            config.contato_email,
+            config.contato_restaurante
         FROM reserva r 
         INNER JOIN cliente c ON r.FK_Cliente_ID_cliente = c.ID_cliente
         INNER JOIN configuracoes config ON config.id = 1
@@ -66,7 +68,9 @@ try {
             $reserva['Numero_mesa'],
             $reserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não',
             $reserva['regras_restaurante'],
-            $reserva['taxa_pessoa_beach_club']
+            $reserva['taxa_pessoa_beach_club'],
+            $reserva['contato_restaurante'],
+            $reserva['contato_email']
         );
 
         if ($sucesso) {

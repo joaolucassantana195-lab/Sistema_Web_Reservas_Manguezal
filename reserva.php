@@ -652,6 +652,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $optionBeach ? 'Sim' : 'Não',
                 $configuracoes['regras_restaurante'],
                 $configuracoes['taxa_pessoa_beach_club'],
+                $configuracoes['contato_restaurante'],
+                $configuracoes['contato_email']
             );
                 $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');
                 $stmtMarkEmail->execute([':id' => $idReservaInserida]);

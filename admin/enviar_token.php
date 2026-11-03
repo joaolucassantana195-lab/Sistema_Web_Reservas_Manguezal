@@ -23,7 +23,6 @@
                     <label for="Email">Digite um email</label>
                     <input type="text" name="email" id="email" placeholder="Digite o email de acesso">
                     <span class="spn-obs">Obs: Somente o administrador tem autorização para redefinir a senha. Caso não seja, entre em contato para alterar sua senha.</span>
-                    <span onclick="reenviarToken(event)" class="spn-reenviar">Reenviar token</span>
                     <span class="spn-erro"></span>
                     <button class="varela-round-regular" type="submit">Enviar token</button>
                 </form>

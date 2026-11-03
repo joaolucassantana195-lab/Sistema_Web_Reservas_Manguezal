@@ -29,29 +29,14 @@ h1{
     text-align: start;
     font-weight: 400;
 }
-.spn-reenviar{
-    color: rgb(255, 156, 63);
-    font-size: 15px;
-    padding: 5px;
-    text-align: start;
-    font-weight: 400;
-    cursor: pointer;
-    max-width:max-content;
-    font-size: 0.8rem;
-}
 .spn-obs{
     color: rgb(255, 156, 63);
     font-size: 15px;
     padding: 5px;
     text-align: start;
     font-weight: 400;
-    cursor: pointer;
     max-width:max-content;
     font-size: 0.8rem;
-}
-.spn-reenviar:hover{
-    text-decoration:underline;
-
 }
 
 .container-login{

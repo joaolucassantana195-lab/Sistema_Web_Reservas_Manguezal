@@ -26,6 +26,7 @@ $mensagens = [
             <p>Para evitar reservas duplicadas por engano, não concluímos este novo pedido. Se você deseja cancelar a sua reserva existente, por favor entre em contato conosco ou verifique a mensagem de confirmação no seu e-mail.</p>
             <div class="opcoes">
                 <a href="index.php" class="btn btn-principal">Voltar ao Início</a>
+                <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" class="btn btn-secundario contato">Entrar em contato</a>
             </div>
         </div>'
     ,
@@ -42,6 +43,15 @@ $mensagens = [
         '<div class="confirmacao status-alerta">
             <h1>📅 Data indisponível</h1>
             <p>A data selecionada não está dentro do funcionamento. Por favor, escolha outra data dentro do funcionamento do restaurante para continuar com a sua reserva.</p>
+            <div class="opcoes">
+                <a href="javascript:history.back()" class="btn btn-principal">Alterar data</a>
+            </div>
+        </div>' 
+    ,
+    'antecedencia' => 
+        '<div class="confirmacao status-alerta">
+            <h1>📅 Antecedência mínima</h1>
+            <p>A data escolhida não respeita a antecedência mínima exigida para reservas!</p>
             <div class="opcoes">
                 <a href="javascript:history.back()" class="btn btn-principal">Alterar data</a>
             </div>
@@ -80,6 +90,17 @@ $mensagens = [
             <p>O domínio do e-mail informado parece não existir ou não está configurado para receber mensagens. Por favor, verifique se há erros de digitação.</p>
             <div class="opcoes">
                 <a href="javascript:history.back()" class="btn btn-principal">Corrigir e-mail</a>
+            </div>
+        </div>'
+    ,
+    'cliente_bloqueado' => 
+        '<div class="confirmacao status-alerta">
+            <h1>🛑 Cadastro Bloqueado</h1>
+            <p>Infelizmente, não foi possível concluir a sua reserva. Identificamos que o seu cadastro está temporariamente bloqueado devido ao número de não comparecimentos (no-show) registrados anteriormente.</p>
+            <p>Para verificar a sua situação ou solicitar o desbloqueio, por favor, entre em contato com a nossa equipe de atendimento.</p>
+          <div class="opcoes">
+                <a href="index.php" class="btn btn-principal">Voltar ao Início</a>
+                <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" class="btn btn-secundario contato">Entrar em contato</a>
             </div>
         </div>'
     ,
@@ -139,5 +160,20 @@ $info = $mensagens[$status] ?? $mensagens['erro'];
             <?php echo $info; ?>
         </section>
     </main>
+    <script>
+        function atualizarContato(){
+            fetch('admin/api/api_configuracoes.php').then(response => response.json()).then(dados => {
+                const contato = dados.contato_restaurante || dados[0]?.contato_restaurante;
+                
+                if (contato) {
+                    const botaoContato = document.querySelector('.contato');
+                    if (botaoContato) {
+                        botaoContato.href = `https://api.whatsapp.com/send/?phone=${contato}&text&type=phone_number&app_absent=0&utm_source=ig`;
+                    }
+                }
+            })
+        }
+        atualizarContato()
+    </script>
 </body>
 </html>

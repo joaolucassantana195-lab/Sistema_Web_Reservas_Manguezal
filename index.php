@@ -36,7 +36,7 @@
           <a class="nav-link" href="sobre.php">Sobre</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
+          <a class="nav-link contato-header" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
         </li>
       </ul>
     </nav>
@@ -60,7 +60,7 @@
           <a class="nav-link" href="sobre.php">Sobre</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
+          <a class="nav-link contato-header" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
         </li>
       </ul>
     </nav>
@@ -304,45 +304,15 @@
 
         <ul class="lista-regras">
           <li>
-            <span class="icone">⏰</span>
             <div>
-              <strong>Tolerância de Atraso</strong>
-              <p>Mesa garantida por até 15 minutos após o horário agendado.</p>
+              <strong>⏰ Tolerância de Atraso</strong>
+              <p class="tolerancia">Mesa garantida por até 15 minutos após o horário agendado.</p>
             </div>
           </li>
           <li>
-            <span class="icone">🐾</span>
             <div>
-              <strong>Espaço Pet-Friendly</strong>
-              <p>Seus pets são bem-vindos em nossa varanda/área externa.</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">🍾</span>
-            <div>
-              <strong>Taxa de Rolha</strong>
-              <p>Traga seu vinho! Cobramos R$ 50,00 por garrafa aberta.</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">🎂</span>
-            <div>
-              <strong>Aniversários</strong>
-              <p>Sinta-se à vontade para trazer o bolo, não cobramos taxa de serviço.</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">​🍴​​</span>
-            <div>
-              <strong>Alimentos e Bebidas Externos</strong>
-              <p>É estritamente proibido entrar com coolers, isopores, alimentos ou bebidas trazidos de fora.</p>
-            </div>
-          </li>
-          <li>
-            <span class="icone">​🏝️​​​</span>
-            <div>
-              <strong>Beach-Club</strong>
-              <p>Cobramos presencialmente uma taxa de R$30,00 por pessoa para utilização da infraestrutura da área restrita.</p>
+              <strong>🏝️ ​​Beach-Club</strong>
+              <p class="taxa-beach">Cobramos presencialmente uma taxa de R$30,00 por pessoa para utilização da infraestrutura da área restrita.</p>
             </div>
           </li>
         </ul>
@@ -462,7 +432,7 @@
               <span class="faq-icone">+</span>
             </button>
             <div class="faq-resposta">
-              <p>Para mesas individuais e pequenas famílias, o atendimento é por <strong>ordem de chegada</strong>. As reservas pelo site são exclusivas para <strong>grupos e excursões</strong> acima de X pessoas.</p>
+              <p>As reservas pelo site estão disponíveis para pessoas <strong>individuais e grupos de até 15 pessoas</strong>. Caso prefira vir sem reserva, o atendimento é realizado por ordem de chegada de acordo com a <strong>disponibilidade de mesas</strong>.</p>
             </div>
           </div>
 
@@ -474,17 +444,7 @@
             <div class="faq-resposta">
               <p>O nosso Buffet a Kilo funciona diariamente das <strong>12h00 às 15h00</strong>. Já as opções À La Carte, petiscos e drinks do Beach Club estão disponíveis durante todo o horário de funcionamento.</p>
             </div>
-          </div>
-
-          <div class="faq-item">
-            <button class="faq-pergunta">
-              <span>O restaurante aceita Pets (Pet Friendly)?</span>
-              <span class="faq-icone">+</span>
-            </button>
-            <div class="faq-resposta">
-              <p>Sim! O Manguezal é Pet Friendly em nossas áreas abertas e de deck. Pedimos apenas que mantenha seu pet na guia por segurança e conforto de todos.</p>
             </div>
-          </div>
 
           <div class="faq-item">
             <button class="faq-pergunta">
@@ -522,7 +482,7 @@
       </p>
       <div class="footer-redes">
         <a href="https://instagram.com/restaurantemanguezal" target="_blank" aria-label="Instagram">📸 Instagram</a>
-        <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" aria-label="WhatsApp">💬 WhatsApp</a>
+        <a class="contato-header" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" aria-label="WhatsApp">💬 WhatsApp</a>
       </div>
       </div>
       
@@ -548,7 +508,7 @@
     <div class="footer-coluna">
       <h4>Onde Estamos</h4>
       <p>📍 R. A, 383-343 - Lot. Nova Itaparica</p>
-      <p>📞 (71) 9712-9517</p>
+      <p class="contato-footer">📞 (71) 97129517</p>
       <p class="contato-email">contato.restaurante.manguezal@gmail.com</p>
     </div>
 

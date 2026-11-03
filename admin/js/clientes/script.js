@@ -94,8 +94,20 @@ function buscarClientes(nome, email, telefone) {
 
         // 1. Monta todo o HTML de uma vez
         clientes.forEach(element => {
+
+            let acaoBloqueio = ''
+            let estilo = ''
+
+            if (element.bloqueado === 0){
+                estilo = 'desbloqueado'
+                acaoBloqueio = `<button onclick="bloquear(event, ${element.id})" class="btn-bloquear">Bloquear</button>`
+            }else{
+                estilo = 'bloqueado'
+                acaoBloqueio = `<button onclick="desbloquear(event, ${element.id})" class="btn-desbloquear">Desbloquear</button>`
+            }
+
             htmlContent += `
-                <div class="linha-cliente">
+                <div class="linha-cliente ${estilo}">
                     <div class="celula-cliente"><div><strong>Nome</strong></div><div>${limparTexto(element.nome)}</div></div>
                     <div class="celula-cliente"><div><strong>Email</strong></div><div>${limparTexto(element.email)}</div></div>
                     <div class="celula-cliente"><div><strong>Telefone</strong></div><div>${limparTexto(element.telefone)}</div></div>
@@ -105,6 +117,7 @@ function buscarClientes(nome, email, telefone) {
                     </div>
                     <div class="celula-cliente">
                         <button onclick="verReservas(${element.id}, '${limparTexto(element.nome)}')" class="btn-verreservas">Ver reservas</button>
+                        ${acaoBloqueio}
                     </div>
                 </div>
             `;
@@ -314,6 +327,71 @@ function downloadRelatorio(id, nome) {
             console.error(`Erro ao buscar reservas do cliente`);
             exibirModalErro('Erro de conexão ao gerar relatório');
         });
+}
+
+async function bloquear(e, id){
+ e.target.disabled = true;
+ e.target.textContent = "Bloqueando..."
+ try {
+    const response = await fetch('../admin/api/api_bloquearcliente.php', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        }, 
+        body : JSON.stringify({
+            id : id
+        })
+    });
+
+    const dados = await response.json();
+
+    if (dados.sucesso){
+        exibirModalSucesso(dados.mensagem)
+    }else{
+        e.target.disabled = false;
+        e.target.textContent = "Bloquear"
+        exibirModalErro(dados.mensagem)
+    }
+
+    buscarClientes();
+
+ }catch(error){
+     exibirModalErro('Erro de conexão')
+     e.target.disabled = false;
+     e.target.textContent = "Bloquear"
+ }
+}
+
+async function desbloquear(e,id){
+    e.target.disabled = true;
+    e.target.textContent = "Desbloqueando..."
+ try {
+    const response = await fetch('../admin/api/api_desbloquearcliente.php', {
+        method : 'POST',
+        headers : {
+            'Content-Type' : 'application/json'
+        }, 
+        body : JSON.stringify({
+            id : id
+        })
+    });
+    const dados = await response.json();
+
+    if (dados.sucesso){
+        exibirModalSucesso(dados.mensagem)
+    }else{
+        e.target.disabled = false;
+        e.target.textContent = "Desbloquear"
+        exibirModalErro(dados.mensagem)
+    }
+
+    buscarClientes();
+
+ } catch (error) {
+     exibirModalErro('Erro de conexão')
+     e.target.disabled = false;
+     e.target.textContent = "Desbloquear"
+ }
 }
 
 function sair() {

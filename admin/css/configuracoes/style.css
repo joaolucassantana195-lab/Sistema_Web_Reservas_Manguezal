@@ -239,14 +239,7 @@ section{
     margin: auto;
     display: flex;
 }
-input{
-    border-radius: 10px;
-    border: none;
-    background-color: #dfdede;
-    padding: 5px;
-    width: 40px;
-    height: 20px;
-}
+
 select{
     width: 150px;
     height: 30px;
@@ -341,6 +334,7 @@ select{
   overflow: hidden;
   box-shadow: -5px 10px 10px rgba(0, 0, 0, 0.303);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 290px;
 }
 
 .config-card:hover {
@@ -405,6 +399,7 @@ input[type="password"],
 input[type="time"],
 input[type="date"],
 input[type="text"],
+input[type="phone"],
 select {
   width: 100%;
   height: 42px;
@@ -422,7 +417,8 @@ select {
 input[type="number"]:focus,
 input[type="time"]:focus,
 input[type="date"]:focus,
-input[type="text"],
+input[type="text"]:focus,
+input[type="phone"]:focus,
 select:focus {
   border-color: var(--primary-light);
   background-color: var(--card-bg);
@@ -586,6 +582,44 @@ select:focus {
   height: 30px;
   background: rgb(212, 212, 212);
 }
+
+.adicionar-regra{
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  color: #00608a;
+  width: 100%;
+  height: 50px;
+  background: rgb(224, 224, 224);
+  margin-top: 10px;
+  font-size: 30px;
+}
+
+.remover-regra{
+  padding: 10px 10px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 8px;
+  border: none;
+  transition: all 0.2s ease;
+  font-size: 20px;
+  color: #00608a;
+  width: 30px;
+  height: 30px;
+  background: rgb(212, 212, 212);
+}
 .remover-feriado:hover{
   background-color: #004765;
   color: white;
@@ -594,6 +628,39 @@ select:focus {
 .adicionar-feriado:hover{
   background-color: #004765;
   color: white;
+}
+.remover-regra:hover{
+  background-color: #004765;
+  color: white;
+}
+
+.adicionar-regra:hover{
+  background-color: #004765;
+  color: white;
+}
+
+.container-regras-flex{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+}
+
+.regra{
+  padding: 10px;
+  border: 2px var(--border-subtle) solid;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.regra div{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.regra div input{
+  height: 30px;
 }
 
 

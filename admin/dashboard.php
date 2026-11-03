@@ -276,7 +276,7 @@ if (empty($_SESSION['usuario_logado'])) {
                         </div>
                         <div class=sem-reservas>
                             <div class="img-agenda">
-                                <img src="images/icone-agenda.png" alt="">
+                                <img src="images/icone-agenda.png" alt="Sem reservas" width="100%" height="auto">
                             </div>
                             <div class="text-error-table">
                                 <p>Sem reservas para Hoje.</p>

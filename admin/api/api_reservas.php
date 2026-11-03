@@ -36,7 +36,8 @@ try {
         c.Nome AS cliente_nome,
         c.Telefone AS cliente_telefone,
         m.Numero_mesa AS mesa_numero,
-        m.ID_mesa AS mesa_id
+        m.ID_mesa AS mesa_id,
+        m.localizacao AS mesa_local
     FROM reserva r
     INNER JOIN cliente c ON r.FK_Cliente_ID_Cliente = c.ID_cliente
     LEFT JOIN mesa m ON r.FK_Mesa_ID_Mesa = m.ID_mesa';

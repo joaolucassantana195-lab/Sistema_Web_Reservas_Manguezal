@@ -234,7 +234,7 @@ if(empty($_SESSION['usuario_logado'] )){
                    <div class="container-cadastrar">
                     <div class="container-cadastrar-title"><h2>Cadastrar usuário</h2></div>
                     <div class="nome"><p>Nome</p><input type="text" placeholder="Nome do usuário" id="nome"></div>
-                    <div class="acesso"><p>Login de acesso</p><input type="text" placeholder="Defina um login" id="login"></div>
+                    <div class="acesso"><p>Login de acesso</p><input type="text" placeholder="Defina um login" id="login" maxlength="60"></div>
                     <div class="senha"><p>Senha de acesso</p><input type="password" placeholder="Defina uma senha" id="senha"></div>
                     <div class="senha"><p>Repita a senha</p><input type="password" placeholder="Repita a senha" id="senha-repetida"></div>
                     <div class="perfil"><p>Tipo de perfil</p><select name="perfil" id="perfil"><option value="atendente">Atendente</option><option value="gerente">Gerente</option></select></div>
@@ -248,7 +248,7 @@ if(empty($_SESSION['usuario_logado'] )){
                     </div>
                     <div class="nenhum-usuario">
                                 <div class="img-agenda">
-                                    <img src="images/icone-nenhumusuario.png" alt="">
+                                    <img src="images/icone-nenhumusuario.png" alt="Nenhum usuario adicionado" width="100%" height="100%">
                                 </div>
                                 <div class="text-error-table">
                                 <p>Nenhum usuário cadastrado.</p>
@@ -259,7 +259,7 @@ if(empty($_SESSION['usuario_logado'] )){
             </div>
         </section>
     </main>
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/usuarios/script.js"></script>
 </body>
 

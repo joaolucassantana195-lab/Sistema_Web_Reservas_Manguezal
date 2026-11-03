@@ -53,6 +53,12 @@ $enviarLembrete =
 $lembrete =
     $dados['lembrete'] ?? 1;
 
+$contatoRestaurante = $dados['contatoRestaurante'] ?? 7197129517;
+
+$contatoEmail = $dados['contatoEmail'] ?? "contato.restaurante.manguezal@gmail.com";
+
+
+
 
 // ============================================================
 // DIAS + HORÁRIOS
@@ -91,6 +97,28 @@ if (!is_array($feriados)) {
     $feriados = [];
 }
 
+$regras = $dados['regras'] ?? [];
+
+if (!is_array($regras)) {
+    $regras = [];
+}
+
+$regras = json_encode(
+    $regras,
+    JSON_UNESCAPED_UNICODE |
+    JSON_UNESCAPED_SLASHES |
+    JSON_FORCE_OBJECT
+);
+
+if ($regras === false) {
+    echo json_encode([
+        'sucesso' => false,
+        'erro' => 'Não foi possível gerar o JSON das regras.'
+    ]);
+
+    exit;
+}
+
 
 // ============================================================
 // TRANSAÇÃO
@@ -114,7 +142,7 @@ try {
             max_pessoas_reserva =
                 :maxPessoas,
 
-            antecedencia_min_reserva_horas =
+            antecedencia_min_reserva_dias =
                 :minReservas,
 
             antecedencia_max_reserva_dias =
@@ -132,7 +160,7 @@ try {
             horario_limite_ultima_reserva =
                 :horarioLimite,
 
-            tolerancia_atraso_minutos =
+            tolerancia_atraso_horas =
                 :atraso,
 
             confirmar_reservas_automaticamente =
@@ -148,7 +176,14 @@ try {
                 :antecedenciaLembrete,
 
             dias_funcionamento =
-                :dias
+                :dias,
+
+            regras_restaurante = 
+             :regras,
+
+             contato_restaurante = :contatoRestaurante,
+
+             contato_email = :contatoEmail
 
         WHERE id = 1
     ";
@@ -196,7 +231,14 @@ try {
             $lembrete,
 
         ':dias' =>
-            $diasFuncionamento
+            $diasFuncionamento,
+
+        ':regras' => 
+        $regras,
+
+        ':contatoRestaurante' => $contatoRestaurante,
+
+        ':contatoEmail' => $contatoEmail
     ]);
 
 

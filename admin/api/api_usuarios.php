@@ -8,7 +8,8 @@ try {
         user.Nome AS nome,
         user.Email AS login,
         user.tipo_perfil AS perfil,
-        user.ID_usuario AS id
+        user.ID_usuario AS id,
+        user.Status AS status
         FROM usuario user 
         WHERE user.tipo_perfil = 'atendente' OR user.tipo_perfil = 'gerente'";
 

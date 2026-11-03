@@ -110,7 +110,7 @@ function atualizarTextosSobre(config) {
   // --- FAQ 1: Mínimo de pessoas na reserva ---
   const faqReserva = document.querySelector('.faq-lista .faq-item:nth-child(1) .faq-resposta p');
   if (faqReserva) {
-    faqReserva.innerHTML = `Para mesas individuais e pequenas famílias, o atendimento é por <strong>ordem de chegada</strong>. As reservas pelo site são exclusivas para <strong>grupos e excursões</strong> a partir de ${config.min_pessoas_reserva} pessoas.`;
+    faqReserva.innerHTML = `As reservas pelo site estão disponíveis para pessoas <strong>individuais e grupos de até ${config.max_pessoas_reserva} pessoas</strong>. Caso prefira vir sem reserva, o atendimento é realizado por <strong>ordem de chegada</strong> de acordo com a <strong>disponibilidade de mesas</strong>.`;
   }
 
   // --- Ocultar ou exibir a seção/card do Beach Club de acordo com a configuração ---
@@ -126,7 +126,7 @@ function atualizarTextosSobre(config) {
   }
 
   // --- FAQ 4: Detalhes do Beach Club ---
-  const faqBeach = document.querySelector('.faq-lista .faq-item:nth-child(4) .faq-resposta p');
+  const faqBeach = document.querySelector('.faq-lista .faq-item:nth-child(3) .faq-resposta p');
   if (faqBeach) {
     if (Number(config.permitir_reserva_beach_club) === 1) {
       const taxa = parseFloat(config.taxa_pessoa_beach_club || 0).toFixed(2).replace('.', ',');
@@ -199,4 +199,16 @@ function atualizarTextosSobre(config) {
 
         } 
   }
+  const telefoneRestaurante = config.contato_restaurante;
+  const telefoneFormatado = `(${telefoneRestaurante.slice(0,2)}) ${telefoneRestaurante.slice(2,3)}${telefoneRestaurante.slice(3,6)}${telefoneRestaurante.slice(6,11)}`
+
+  const contato = document.querySelectorAll('.contato-header');
+  contato.forEach(element => {
+    element.href = `https://api.whatsapp.com/send/?phone=${config.contato_restaurante}&text&type=phone_number&app_absent=0&utm_source=ig`
+  })
+  const contatoFooter = document.querySelector('.contato-footer');
+  contatoFooter.innerText = `📞 ${telefoneFormatado}`;
+
+  const contatoEmail = document.querySelector('.contato-email');
+  contatoEmail.innerText = config.contato_email;
 }

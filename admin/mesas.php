@@ -242,69 +242,67 @@ if (empty($_SESSION['usuario_logado'])) {
                                 <div style="display: flex; gap:10px; align-items:center;">
                                     <p>Localização: </p>
                                     <select id="localizacaoMesa">
-                                        <option value="beach">Beach Club</option>
+                                        <option value="Beach Club">Beach Club</option>
                                         <option value="Área aberta" selected>Área aberta</option>
                                     </select>
 
-                                </div>
-                                <span id="span-erro" class="spn-erro-adicionar" style='display:none;'>Preencha os campos acima!</span>
-                                <button class="btn-adicionar" onclick="adicionarMesa()">Adicionar / Modificar</button>
-                                <button class="btn-iterar" onclick="iterarMesas()">Iterar mesas</button>
+                                </div>     
                             </div>
+                            <span id="span-erro" class="spn-erro-adicionar" style='display:none;'>Preencha os campos acima!</span>
+                            <button class="btn-adicionar" onclick="adicionarMesa()">Adicionar / Modificar</button>
+                            <button class="btn-iterar" onclick="iterarMesas()">Iterar mesas</button>
                         </div>
                         <h2>Mesas adicionadas</h2>
                     <?php endif; ?>
-                    <p class="legenda-mesas" style='display:flex; flex-wrap:wrap;'>
                     <div class="container-filtrar">
                         <h2>Filtrar</h2>
                         <div>
-                          <div class="numero">
-                            <p>Numero</p><input type="number" id="numero">
-                        </div>
-                        <div class="status">
-                            <p>Status</p>
-                            <select name="status" id="status">]
-                                <option value="Selecione um local" default>Selecione um status</option>
-                                <option value="Livre" default>Livre</option>
-                                <option value="Reservada">Reservada</option>
-                                <option value="Ocupada">Ocupada</option>
-                            </select>
-                        </div>
-                        <div class="localizacao">
-                            <p>Local</p>
-                            </p> <select name="local" id="local">
-                                <option value="Selecione um local" default>Selecione um local</option>
-                                <option value="Área aberta">Área aberta</option>
-                                <option value="beach">Beach Club</option>
-                            </select>
-                        </div>  
-                        </div>
-                        <div class="d-flex justify-content-end w-100">
-                            <button class="btn-filtro" onclick="filtrar(event)">Procurar</button>
+                            <div class="numero">
+                                <p>Numero</p>
+                                <input type="number" id="numero" placeholder="Insira um número" style="width: 100%;">
+                            </div>
+                            <div class="status">
+                                <p>Status</p>
+                                <select name="status" id="status">]
+                                    <option value="Selecione um local" default>Selecione um status</option>
+                                    <option value="Livre" default>Livre</option>
+                                    <option value="Reservada">Reservada</option>
+                                    <option value="Ocupada">Ocupada</option>
+                                </select>
+                            </div>
+                            <div class="localizacao">
+                                <p>Local</p>
+                                <select name="local" id="local">
+                                    <option value="Selecione um local" default>Selecione um local</option>
+                                    <option value="Área aberta">Área aberta</option>
+                                    <option value="Beach Club">Beach Club</option>
+                                </select>
+                            </div>
+                                <button class="btn-filtro" onclick="filtrar(event)">Procurar</button>
+                            
+                            
                         </div>
                     </div>
-                    <div class="d-flex">
-                       <span>🟢 Livre </span>
-                    <span>🟡​ Reservada</span>
-                    <span>🔴​ Ocupada</p> 
+                    <div class="d-flex gap-3" style="min-width: 300px;">
+                        <span>🟢 Livre </span>
+                        <span>🟡​ Reservada</span>
+                        <span>🔴​ Ocupada</p>
                     </div>
-                    
-                        <div class="container-display">
-                            <div class=sem-mesas>
-                                <div class="img-agenda">
-                                    <img src="images/icone-nenhuma-mesa.png" alt="">
-                                </div>
-                                <div class="text-error-table">
-                                    <p>Nenhuma mesa encontrada.</p>
-                                </div>
+                    <div class="container-display">
+                        <div class=sem-mesas>
+                            <div class="img-agenda">
+                                <img src="images/icone-nenhuma-mesa.png" alt="Sem mesas" width="100%" height="auto">
                             </div>
-                            <div class="display-mesas">
-
-
+                            <div class="text-error-table">
+                                <p>Nenhuma mesa encontrada.</p>
                             </div>
                         </div>
+                        <div class="display-mesas">
 
-                </div>
+
+                        </div>
+                    </div>
+            </div>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>

@@ -75,13 +75,23 @@ function buscarUsuarios() {
                 let perfilFormatado = element.perfil ? element.perfil.charAt(0).toUpperCase() + element.perfil.slice(1) : '';
                 bodyAtendentes.innerHTML += `
                     <div class="linha-atendente">
-                        <div class="celula-atendente"><div><strong>Nome</strong></div><div>${limparTexto(element.nome)}</div></div>
+                        
+                    
+                        <div class="celula-atendente"><div><strong>Nome</strong></div><div class="nome-usuario">${limparTexto(element.nome)}</div></div>
                         <div class="celula-atendente"><div><strong>Perfil</strong></div><div>${limparTexto(perfilFormatado)}</div></div>
                         <div class="celula-atendente login"><div><strong>Login</strong></div><div>${limparTexto(element.login)}</div></div>
                         <div class="celula-atendente">
                             <div class="acoes-card">
-                                <div class="btn-redefinir" onclick="redefinirSenha(event, ${element.id})">Redefinir senha</div>
-                                <div class="btn-remover" onclick="removerUsuario(event, ${element.id})">Remover usuário</div>
+                                <div class="btn-${element.status.toLowerCase()}" onclick="ativarUsuario(event, ${element.id}, '${element.status.toLowerCase()}')">${element.status.toLowerCase() === 'ativo' ? 'Desativar usuário' : 'Ativar usuário'}</div>
+                            <div class="btn-group">
+                            <button type="button" class="mais-opcoes" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="images/menu.png" alt="Mais opções" width="100%" height="auto">
+                            </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" onclick="redefinirSenha(event, ${element.id})">Redefinir senha</a></li>
+                                    <li><a class="dropdown-item" onclick="removerUsuario(event, ${element.id})">Remover usuário</a></li>
+                                </ul>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -185,16 +195,16 @@ function removerUsuario(e, id) {
         left: 0;
         width: 100vw;
         height: 100vh;
-        background-color: rgba(0, 0, 0, 0.30);
+        background-color: rgba(0, 0, 0, 0.4);
         display: flex;
         justify-content: center;
         align-items: center;
         z-index: 9999;
-        font-size:20px;
+        font-size: 20px;
     `;
 
     modal.innerHTML = `
-        <div class="varela-round-regular" style="background-color:#ececec; color:#00608a; padding:20px; border-radius:15px; border:2px solid #00608a; font-weight:400; box-shadow:0px 10px 15px #00000036; display:flex; flex-direction:column; gap:10px; align-items:center;">
+        <div class="varela-round-regular" style="background-color:#ececec; color:#00608a; padding:20px; border-radius:15px; border:2px solid #00608a; font-weight:400; box-shadow:0px 10px 15px #00000036; display:flex; flex-direction:column; gap:10px; align-items:center; margin:20px;">
             <p style="margin:0;">Deseja realmente remover este usuário?</p>
             <div class="content-modal" style="width:100%; display:flex; justify-content:end; gap:10px; margin-top:10px;">
                <button class="btn-confirmar" style="background:#00608a; color:white; border:none; padding:4px 12px; border-radius:5px; font-weight:bold; cursor:pointer;">Confirmar</button>
@@ -318,6 +328,55 @@ function redefinirSenha(e, id) {
             }
         }
     });
+}
+
+function ativarUsuario(e, id, status){
+    e.target.disabled = true
+    e.target.innerText = "Carregando..."
+    
+    if (status === 'inativo'){
+        fetch('../admin/api/api_ativarusuario.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id : id})
+            }).then(response => response.json()).then(data => {
+            if(data.sucesso){
+                e.target.disabled = false
+                buscarUsuarios()
+                exibirModalSucesso(data.mensagem);
+            }else{
+                 e.target.disabled = false
+                 buscarUsuarios()
+                 exibirModalErro(data.mensagem);
+            }
+            
+        }).catch(err => {
+            buscarUsuarios()
+            exibirModalErro('Erro ao desativar usuario.')
+        })
+       
+    }else{
+        fetch('../admin/api/api_desativarusuario.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id : id})
+            }).then(response => response.json()).then(data => {
+            if(data.sucesso){
+                e.target.disabled = false
+                buscarUsuarios()
+                exibirModalSucesso(data.mensagem);
+            }else{
+                 e.target.disabled = false
+                 buscarUsuarios()
+                  exibirModalErro(data.mensagem);
+            }
+        }).catch(err => {
+            buscarUsuarios()
+            exibirModalErro('Erro ao ativar usuario.')
+        })
+    }
+
+
 }
 
 function sair() {

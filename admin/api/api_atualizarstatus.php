@@ -14,6 +14,7 @@ $idReserva  = $dados['id'] ?? null;
 $novoStatus = $dados['status'] ?? null;
 $novaMesa   = $dados['mesa'] ?? null;
 $motivo = $dados['motivo'] ?? '';
+$acao = $dados['acao'] ?? null;
 
 if(!$motivo || $motivo == ''){
     $motivo = "Indisponibilidade de agenda/vaga para a data e horário solicitados.";
@@ -42,8 +43,8 @@ if ($idReserva && $novoStatus){
 
         // 2. Executa o UPDATE principal da reserva
         if ($novaMesa !== null) {
-            $sql = 'UPDATE reserva SET Status = :status, FK_Mesa_ID_Mesa = :mesa WHERE ID_reserva = :id';
-            $params = [':id' => $idReserva, ':status' => $novoStatus, ':mesa' => $novaMesa];
+                $sql = 'UPDATE reserva SET Status = :status, FK_Mesa_ID_Mesa = :mesa WHERE ID_reserva = :id';
+                $params = [':id' => $idReserva, ':status' => $novoStatus, ':mesa' => $novaMesa];
         } else {
             $sql = 'UPDATE reserva SET Status = :status WHERE ID_reserva = :id';
             $params = [':id' => $idReserva, ':status' => $novoStatus];
@@ -153,11 +154,13 @@ if ($idReserva && $novoStatus){
                 ');
                 $stmtDados->execute([':id' => $idReserva]);
                 $dadosReserva = $stmtDados->fetch(PDO::FETCH_ASSOC);
-
+                
                 if ($dadosReserva) {
                     $dataReservaFmt = date('Y-m-d', strtotime($dadosReserva['Data']));
                     $horarioReserva = substr($dadosReserva['Horario'], 0, 5);
+                 
 
+                 if($acao != 'alterarMesa'){
                     if ($dataReservaFmt < $hoje) {
                         $pdo->rollBack();
                         echo json_encode(['sucesso' => false, 'erro' => 'Não é possível confirmar uma reserva com data anterior a hoje.']);
@@ -169,7 +172,6 @@ if ($idReserva && $novoStatus){
                         echo json_encode(['sucesso' => false, 'erro' => "Não é possível confirmar uma reserva em horário retroativo para hoje."]);
                         exit;
                     }
-
                     if ($config) {
                         $abertura = substr($config['horario_abertura'], 0, 5);
                         $limite   = substr($config['horario_limite_ultima_reserva'], 0, 5);
@@ -180,6 +182,10 @@ if ($idReserva && $novoStatus){
                             exit;
                         }
                     }
+                 }
+                    
+
+                    
 
                     if ($config && ($config['enviar_email_confirmacao'] == 1 || $config['enviar_email_confirmacao'] === true)) {
                         if (!empty($dadosReserva['Email']) && (int)$dadosReserva['email_confirmacao'] === 0) {
@@ -190,7 +196,9 @@ if ($idReserva && $novoStatus){
                                 $horarioReserva,
                                 $dadosReserva['QTD_pessoas'],
                                 $dadosReserva['Numero_mesa'] ?? 'A definir',
-                                $dadosReserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não'
+                                $dadosReserva['BEACH_CLUB'] == 1 ? 'Sim' : 'Não',
+                                $config['regras_restaurante'],
+                                $config['taxa_pessoa_beach_club'],
                             );
 
                             $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');

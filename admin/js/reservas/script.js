@@ -193,19 +193,19 @@ function atualizarSelectPorLinha() {
                 selectOptions.innerHTML = '';
                 
                 let disponiveis = [];
-                if (beachclub === 'Sim') {
+                if (beachclub === 'Beach Club') {
                     disponiveis = mesas.filter(m =>
                         m.ocupacao === 'Livre' &&
                         m.mesa_ativa == true &&
                         m.mesa_capacidade >= parseInt(qtdPessoas) &&
-                        m.mesa_local == 'beach'
+                        m.mesa_local == 'Beach Club'
                     ); 
                 } else {
                     disponiveis = mesas.filter(m =>
                         m.ocupacao === 'Livre' &&
                         m.mesa_ativa == true &&
                         m.mesa_capacidade >= parseInt(qtdPessoas) &&
-                        m.mesa_local != 'beach'
+                        m.mesa_local != 'Beach Club'
                     ); 
                 }
 
@@ -234,7 +234,8 @@ function renderizarReservas(reservas) {
         let dataFormatada = `${partesData[2]}/${partesData[1]}/${partesData[0].substring(2)}`;
         let horarioFormatado = element.reserva_horario.slice(0, -3);
         let telefoneFormatado = `(${element.cliente_telefone.slice(0, -9)}) ${element.cliente_telefone.slice(3, -7)} ${element.cliente_telefone.slice(3, -4)}-${element.cliente_telefone.slice(7)}`;
-        let reservabeach = element.reserva_beachclub == 1 ? 'Sim' : 'Não';
+        let reservabeach = element.reserva_beachclub == 1 ? 'Beach Club' : 'Área aberta';
+        let localMesa = element.mesa_local ? element.mesa_local : reservabeach;
         
         if (element.reserva_status === 'Aguardando') {
             classeStatus = 'status-aguardando';
@@ -261,8 +262,9 @@ function renderizarReservas(reservas) {
         
             htmlCompleto += `<div class="linha-reservas-${element.reserva_status.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '')} linha-reservas card-reserva">
                 <div class="celula-reservas td-status">
+                        <span class="celula-reservas data-beach mesa-${localMesa.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, '')}" data-beach="${localMesa}">${localMesa.toUpperCase()}</span>
                         <span class="${classeStatus} status-reserva">${limparTexto(element.reserva_status)}</span>
-                    </div>
+                </div>
                 <!-- Cabeçalho do Cartão -->
                 <div class="card-header">
                     <div class="cliente-info">
@@ -287,20 +289,18 @@ function renderizarReservas(reservas) {
                         <span class="label">Pessoas</span>
                         <span class="valor celula-qtdpessoas">${element.reserva_qtd_pessoas}</span>
                     </div>
-
-                    <div class="celula-reservas data-beach" data-beach="${reservabeach}">
-                        <span class="label">Beach Club</span>
-                        <span class="valor">${reservabeach}</span>
-                    </div>
                 </div>
 
                 <!-- Rodapé de Ações -->
                 <div class="card-footer">
                     <div class="celula-reservas acoes-celula">
-                        <button class="btn-observacao" onclick="verObservacoes('${limparTexto(element.cliente_nome)}','${limparTexto(element.reserva_observacoes)}')">Observações</button>
-                    <div class="container-acoes-linha">
+                        <div>
+                        <button class="btn-observacao" onclick="verObservacoes('${limparTexto(element.cliente_nome)}','${limparTexto(element.reserva_observacoes)}')"><img src="images/observacao.png" alt="observações"></button>
+                         </div>
+                        
+                        <div class="container-acoes-linha">
                         ${acoes}
-                    </div>
+                        </div>
                     </div>
                 </div>
 
@@ -610,21 +610,26 @@ function alterarMesa(e, reserva_id) {
             selectMesa.innerHTML = '';
             
             let disponiveis = [];
-            if (beachclub === 'Sim') {
+            /*if (beachclub === 'Beach Club') {
                 disponiveis = mesas.filter(m =>
                     m.ocupacao === 'Livre' &&
                     m.mesa_ativa == true &&
                     m.mesa_capacidade >= parseInt(qtdPessoas) &&
-                    m.mesa_local == 'beach'
+                    m.mesa_local == 'Beach Club'
                 ); 
             } else {
                 disponiveis = mesas.filter(m =>
                     m.ocupacao === 'Livre' &&
                     m.mesa_ativa == true &&
                     m.mesa_capacidade >= parseInt(qtdPessoas) &&
-                    m.mesa_local != 'beach'
+                    m.mesa_local != 'Beach Club'
                 ); 
-            }
+            }*/
+           disponiveis = mesas.filter(m =>
+                    m.ocupacao === 'Livre' &&
+                    m.mesa_ativa == true &&
+                    m.mesa_capacidade >= parseInt(qtdPessoas)
+                ); 
 
            if (disponiveis.length === 0) {
                 selectMesa.innerHTML = `<option value="">Nenhuma mesa disponível com capacidade suficiente.</option>`;
@@ -662,7 +667,8 @@ function alterarMesa(e, reserva_id) {
             body: JSON.stringify({
                 id: reserva_id,
                 status: linha?.querySelector('.status-reserva')?.textContent.trim() ?? 'Em Atendimento',
-                mesa: novaMesaId
+                mesa: novaMesaId,
+                acao:'alterarMesa'
             })
         })
         .then(async response => {

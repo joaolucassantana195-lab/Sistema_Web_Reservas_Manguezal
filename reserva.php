@@ -207,20 +207,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | VERIFICAR FERIADO
-        |--------------------------------------------------------------------------
-        |
-        | Existem dois tipos:
-        |
-        | 1. recorrente = 0
-        |    Bloqueia somente a data cadastrada.
-        |
-        | 2. recorrente = 1
-        |    Bloqueia o mesmo dia/mês todos os anos.
-        |
-        */
 
         $stmtFeriado = $pdo->prepare(
             'SELECT data, descricao, recorrente
@@ -395,31 +381,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
 
-        if ($data === $dataAtual) {
+       $antecedenciaMinimaDias =
+            (int) ($configuracoes['antecedencia_min_reserva_dias'] ?? 0);
 
-            $antecedenciaMinima =
-                (int) ($configuracoes['antecedencia_min_reserva_horas'] ?? 0);
+        if ($antecedenciaMinimaDias > 0) {
+            $hoje = new DateTime('today');
+            $dataReservaObj = new DateTime($data);
 
-            if ($antecedenciaMinima > 0) {
+            
+            $dataMinimaPermitida = clone $hoje;
+            $dataMinimaPermitida->modify('+' . $antecedenciaMinimaDias . ' days');
 
-                $agora = new DateTime();
-
-                $agora->modify(
-                    '+' . $antecedenciaMinima . ' hours'
-                );
-
-                $dataHoraReserva = DateTime::createFromFormat(
-                    'Y-m-d H:i',
-                    $data . ' ' . $horario
-                );
-
-                if (
-                    $dataHoraReserva &&
-                    $dataHoraReserva < $agora
-                ) {
-                    header("Location: confirmacao.php?status=antecedencia");
-                    exit;
-                }
+            
+            if ($dataReservaObj < $dataMinimaPermitida) {
+                header("Location: confirmacao.php?status=antecedencia");
+                exit;
             }
         }
 
@@ -430,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         */
 
         $stmtBusca = $pdo->prepare(
-            'SELECT ID_cliente
+            'SELECT ID_cliente, bloqueado
              FROM cliente
              WHERE Email = :email'
         );
@@ -444,6 +420,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $idCliente = $clienteExistente
             ? $clienteExistente['ID_cliente']
             : null;
+
+        $clienteBloqueado = $clienteExistente 
+            ? $clienteExistente['bloqueado']
+            : 0;
+
+        if ($clienteBloqueado === 1) {
+             header(
+                    "Location: confirmacao.php?status=cliente_bloqueado"
+                );
+                exit;
+        }
 
         /*
         |--------------------------------------------------------------------------
@@ -662,7 +649,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $horario,
                 $pessoas,
                  $numeroMesaAtribuida,
-                $optionBeach ? 'Sim' : 'Não'
+                $optionBeach ? 'Sim' : 'Não',
+                $configuracoes['regras_restaurante'],
+                $configuracoes['taxa_pessoa_beach_club'],
             );
                 $stmtMarkEmail = $pdo->prepare('UPDATE reserva SET email_confirmacao = 1 WHERE ID_reserva = :id');
                 $stmtMarkEmail->execute([':id' => $idReservaInserida]);

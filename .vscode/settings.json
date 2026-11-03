@@ -1,0 +1,8 @@
+{
+    "workbench.editor.editorActionsLocation": "default",
+    "workbench.editor.empty.hint": "text",
+    "workbench.editor.highlightModifiedTabs": false,
+    "workbench.editor.labelFormat": "default",
+    "workbench.editor.limit.enabled": false,
+    "workbench.editor.limit.excludeDirty": false
+}

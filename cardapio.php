@@ -32,7 +32,7 @@
           <a class="nav-link" href="sobre.php">Sobre</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
+          <a class="nav-link contato-header" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
         </li>
       </ul>
     </nav>
@@ -56,7 +56,7 @@
           <a class="nav-link" href="sobre.php">Sobre</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
+          <a class="nav-link contato-header" target="_blank" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig">Contato</a>
         </li>
       </ul>
     </nav>
@@ -124,7 +124,7 @@
       </p>
       <div class="footer-redes">
         <a href="https://instagram.com/restaurantemanguezal" target="_blank" aria-label="Instagram">📸 Instagram</a>
-        <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" aria-label="WhatsApp">💬 WhatsApp</a>
+        <a class="contato-header" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" aria-label="WhatsApp">💬 WhatsApp</a>
       </div>
       </div>
       
@@ -150,7 +150,7 @@
     <div class="footer-coluna">
       <h4>Onde Estamos</h4>
       <p>📍 R. A, 383-343 - Lot. Nova Itaparica</p>
-      <p>📞 (71) 9712-9517</p>
+      <p class="contato-footer">📞 (71) 9712-9517</p>
       <p class="contato-email">contato.restaurante.manguezal@gmail.com</p>
     </div>
 

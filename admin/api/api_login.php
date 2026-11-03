@@ -33,16 +33,24 @@ try{
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if($usuario && password_verify($senha, $usuario['Senha'])){
-        $_SESSION['usuario_logado'] = true;
-        $_SESSION['usuario_id'] = $usuario['ID_usuario'];
-        $_SESSION['perfil_usuario'] = $usuario['tipo_perfil'];
+        if($usuario['Status'] === 'ativo'){
+            $_SESSION['usuario_logado'] = true;
+            $_SESSION['usuario_id'] = $usuario['ID_usuario'];
+            $_SESSION['perfil_usuario'] = $usuario['tipo_perfil'];
 
-        echo json_encode([
-        'sucesso' => true,
-        'mensagem' => 'Login realizado com sucesso!',
-        'redirect' => 'dashboard.php'
-    ]);
-        exit;
+            echo json_encode([
+            'sucesso' => true,
+            'mensagem' => 'Login realizado com sucesso!',
+            'redirect' => 'dashboard.php'
+            ]);
+            exit;
+        }else{
+            echo json_encode([
+            'sucesso' => false,
+            'mensagem' => 'Seu login está desativado',
+            ]);
+            exit;
+    }
     }
     echo json_encode([
         'sucesso' => false,

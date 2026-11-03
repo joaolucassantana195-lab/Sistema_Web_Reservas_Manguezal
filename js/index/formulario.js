@@ -34,557 +34,356 @@ const horariosFuncionamento = [];
 
 let dataMax = null;
 
-
 // ============================================================
 // CARREGAR CONFIGURAÇÕES
 // ============================================================
 
 function carregarConfiguracoes() {
+  fetch("admin/api/api_configuracoes.php")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Erro HTTP: " + response.status);
+      }
 
-    fetch("admin/api/api_configuracoes.php")
+      return response.json();
+    })
 
-        .then((response) => {
+    .then((config) => {
+      configBanco = config;
 
-            if (!response.ok) {
-                throw new Error(
-                    "Erro HTTP: " + response.status
-                );
-            }
+      let regras = config.regras_restaurante;
 
-            return response.json();
+      if (typeof regras === "string") {
+        try {
+          regras = JSON.parse(regras);
+        } catch (erro) {
+          console.error("Erro ao interpretar regras.");
+        }
 
-        })
+        if (!regras || typeof regras !== "object" || Array.isArray(regras)) {
+          regras = {};
+        }
 
-        .then((config) => {
+        // Guarda o objeto convertido
+        configBanco.regras_restaurante = regras;
 
-            configBanco = config;
+        // ========================================================
+        // CONVERTER DIAS DE FUNCIONAMENTO
+        // ========================================================
 
+        let diasFuncionamento = config.dias_funcionamento;
 
-            // ========================================================
-            // CONVERTER DIAS DE FUNCIONAMENTO
-            // ========================================================
+        // Caso venha como JSON em formato de string
+        if (typeof diasFuncionamento === "string") {
+          try {
+            diasFuncionamento = JSON.parse(diasFuncionamento);
+          } catch (erro) {
+            console.error("Erro ao interpretar dias_funcionamento");
 
-            let diasFuncionamento = config.dias_funcionamento;
+            diasFuncionamento = {};
+          }
+        }
 
+        // Garante que seja um objeto
+        if (
+          !diasFuncionamento ||
+          typeof diasFuncionamento !== "object" ||
+          Array.isArray(diasFuncionamento)
+        ) {
+          diasFuncionamento = {};
+        }
 
-            // Caso venha como JSON em formato de string
-            if (typeof diasFuncionamento === "string") {
+        // Guarda o objeto convertido
+        configBanco.dias_funcionamento = diasFuncionamento;
 
-                try {
+        // ========================================================
+        // DATA ATUAL
+        // ========================================================
 
-                    diasFuncionamento =
-                        JSON.parse(diasFuncionamento);
+        const agora = new Date();
 
-                } catch (erro) {
+        // ========================================================
+        // HORÁRIO LIMITE DA ÚLTIMA RESERVA
+        // ========================================================
 
-                    console.error(
-                        "Erro ao interpretar dias_funcionamento"
-                    );
+        const limiteStr = config.horario_limite_ultima_reserva || "16:00";
 
-                    diasFuncionamento = {};
+        const [horasLimite, minutosLimite] = limiteStr.split(":").map(Number);
 
-                }
+        const dataLimiteHoje = new Date(agora);
 
-            }
+        dataLimiteHoje.setHours(horasLimite, minutosLimite, 0, 0);
 
+        // ========================================================
+        // DATA MÍNIMA
+        // ========================================================
 
-            // Garante que seja um objeto
-            if (
-                !diasFuncionamento ||
-                typeof diasFuncionamento !== "object" ||
-                Array.isArray(diasFuncionamento)
-            ) {
+        const dataMinima = new Date(agora);
 
-                diasFuncionamento = {};
+        if (agora >= dataLimiteHoje) {
+          dataMinima.setDate(dataMinima.getDate() + 1);
+        }
 
-            }
+        // ========================================================
+        // DATA MÁXIMA
+        // ========================================================
 
+        const diasAntecedenciaMax =
+          parseInt(config.antecedencia_max_reserva_dias, 10) || 30;
 
-            // Guarda o objeto convertido
-            configBanco.dias_funcionamento =
-                diasFuncionamento;
+        const dataMaxima = new Date(agora);
 
+        dataMaxima.setDate(dataMaxima.getDate() + diasAntecedenciaMax);
 
+        dataMax = dataMaxima;
 
-            // ========================================================
-            // DATA ATUAL
-            // ========================================================
+        // ========================================================
+        // CONFIGURAR CALENDÁRIO
+        // ========================================================
 
-            const agora = new Date();
+        flatpickr(data, {
+          dateFormat: "d/m/Y",
 
+          minDate: dataMinima,
 
-            // ========================================================
-            // HORÁRIO LIMITE DA ÚLTIMA RESERVA
-            // ========================================================
+          maxDate: dataMaxima,
 
-            const limiteStr =
-                config.horario_limite_ultima_reserva ||
-                "16:00";
+          disableMobile: true,
 
+          enable: [
+            function (date) {
+              const diaSemana = date.getDay();
 
-            const [
-                horasLimite,
-                minutosLimite
-            ] = limiteStr
-                .split(":")
-                .map(Number);
+              /*
+               * Domingo = 0
+               * Segunda = 1
+               * Terça   = 2
+               * Quarta  = 3
+               * Quinta  = 4
+               * Sexta   = 5
+               * Sábado  = 6
+               */
 
-
-            const dataLimiteHoje =
-                new Date(agora);
-
-
-            dataLimiteHoje.setHours(
-                horasLimite,
-                minutosLimite,
-                0,
-                0
-            );
-
-
-            // ========================================================
-            // DATA MÍNIMA
-            // ========================================================
-
-            const dataMinima =
-                new Date(agora);
-
-
-            if (agora >= dataLimiteHoje) {
-
-                dataMinima.setDate(
-                    dataMinima.getDate() + 1
-                );
-
-            }
-
-
-            // ========================================================
-            // DATA MÁXIMA
-            // ========================================================
-
-            const diasAntecedenciaMax =
-                parseInt(
-                    config.antecedencia_max_reserva_dias,
-                    10
-                ) || 30;
-
-
-            const dataMaxima =
-                new Date(agora);
-
-
-            dataMaxima.setDate(
-                dataMaxima.getDate() +
-                diasAntecedenciaMax
-            );
-
-
-            dataMax = dataMaxima;
-
-
-            // ========================================================
-            // CONFIGURAR CALENDÁRIO
-            // ========================================================
-
-            flatpickr(data, {
-
-                dateFormat: "d/m/Y",
-
-                minDate: dataMinima,
-
-                maxDate: dataMaxima,
-
-                disableMobile: true,
-
-                enable: [
-
-                    function (date) {
-
-                        const diaSemana =
-                            date.getDay();
-
-                        /*
-                         * Domingo = 0
-                         * Segunda = 1
-                         * Terça   = 2
-                         * Quarta  = 3
-                         * Quinta  = 4
-                         * Sexta   = 5
-                         * Sábado  = 6
-                         */
-
-                        return Boolean(
-                            configBanco
-                                .dias_funcionamento[
-                                    String(diaSemana)
-                                ]
-                        );
-
-                    }
-
-                ]
-
-            });
-
-
-            // ========================================================
-            // LIMITE DE PESSOAS
-            // ========================================================
-
-            qtdPessoas.placeholder =
-                `Mínimo de ${config.min_pessoas_reserva} e máximo de ${config.max_pessoas_reserva} pessoas`;
-
-
-            // ========================================================
-            // ATUALIZAR TEXTOS
-            // ========================================================
-
-            atualizarTextosInterface(config);
-
-        })
-
-        .catch((erro) => {
-
-            console.error(
-                "Erro ao carregar configurações"
-            );
-
+              return Boolean(configBanco.dias_funcionamento[String(diaSemana)]);
+            },
+          ],
         });
 
-}
+        // ========================================================
+        // LIMITE DE PESSOAS
+        // ========================================================
 
+        qtdPessoas.placeholder = `Mínimo de ${config.min_pessoas_reserva} e máximo de ${config.max_pessoas_reserva} pessoas`;
+
+        // ========================================================
+        // ATUALIZAR TEXTOS
+        // ========================================================
+
+        atualizarTextosInterface(config);
+        atualizarRegras(configBanco);
+      }
+    })
+    .catch((erro) => {
+      console.error("Erro ao carregar configurações");
+    });
+}
 
 // ============================================================
 // FORMATAR DATA YYYY-MM-DD
 // ============================================================
 
 function formatarDataYYYYMMDD(data) {
+  const ano = data.getFullYear();
 
-    const ano =
-        data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
 
-    const mes =
-        String(
-            data.getMonth() + 1
-        ).padStart(2, "0");
+  const dia = String(data.getDate()).padStart(2, "0");
 
-    const dia =
-        String(
-            data.getDate()
-        ).padStart(2, "0");
-
-    return `${ano}-${mes}-${dia}`;
-
+  return `${ano}-${mes}-${dia}`;
 }
-
 
 // ============================================================
 // GERAR HORÁRIOS DE ACORDO COM A DATA
 // ============================================================
 
 function gerarHorariosDisponiveis(dataSelecionada) {
+  horariosFuncionamento.length = 0;
 
-    horariosFuncionamento.length = 0;
+  if (!dataSelecionada) {
+    return;
+  }
 
+  // ========================================================
+  // DESCOBRIR DIA DA SEMANA
+  // ========================================================
 
-    if (!dataSelecionada) {
-        return;
-    }
+  const diaSemana = dataSelecionada.getDay();
 
+  // ========================================================
+  // PEGAR CONFIGURAÇÃO DO DIA
+  // ========================================================
 
-    // ========================================================
-    // DESCOBRIR DIA DA SEMANA
-    // ========================================================
+  const diasFuncionamento = configBanco?.dias_funcionamento || {};
 
-    const diaSemana =
-        dataSelecionada.getDay();
+  const horarioDia = diasFuncionamento[String(diaSemana)];
 
+  // ========================================================
+  // VERIFICAR SE O DIA FUNCIONA
+  // ========================================================
 
+  if (!horarioDia || !horarioDia.abertura || !horarioDia.fechamento) {
+    return;
+  }
 
+  // ========================================================
+  // HORÁRIO DE ABERTURA
+  // ========================================================
 
-    // ========================================================
-    // PEGAR CONFIGURAÇÃO DO DIA
-    // ========================================================
+  const [horaAbertura, minutoAbertura] = horarioDia.abertura
+    .substring(0, 5)
+    .split(":")
+    .map(Number);
 
-    const diasFuncionamento =
-        configBanco?.dias_funcionamento || {};
+  // ========================================================
+  // HORÁRIO DE FECHAMENTO
+  // ========================================================
 
+  const [horaFechamento, minutoFechamento] = horarioDia.fechamento
+    .substring(0, 5)
+    .split(":")
+    .map(Number);
 
-    const horarioDia =
-        diasFuncionamento[
-            String(diaSemana)
-        ];
+  const inicioEmMinutos = horaAbertura * 60 + minutoAbertura;
 
+  const fechamentoEmMinutos = horaFechamento * 60 + minutoFechamento;
 
+  // ========================================================
+  // LIMITE DA ÚLTIMA RESERVA
+  // ========================================================
 
+  let limiteReservaEmMinutos = fechamentoEmMinutos;
 
-    // ========================================================
-    // VERIFICAR SE O DIA FUNCIONA
-    // ========================================================
+  if (configBanco.horario_limite_ultima_reserva) {
+    const [horaLimite, minutoLimite] = configBanco.horario_limite_ultima_reserva
+      .substring(0, 5)
+      .split(":")
+      .map(Number);
 
-    if (
-        !horarioDia ||
-        !horarioDia.abertura ||
-        !horarioDia.fechamento
-    ) {
+    const limiteConfiguracao = horaLimite * 60 + minutoLimite;
 
-        return;
+    /*
+     * O último horário disponível será
+     * o menor entre:
+     *
+     * - fechamento do dia
+     * - limite da última reserva
+     */
 
-    }
+    limiteReservaEmMinutos = Math.min(fechamentoEmMinutos, limiteConfiguracao);
+  }
 
+  // ========================================================
+  // GERAR HORÁRIOS DE 15 EM 15 MINUTOS
+  // ========================================================
 
-    // ========================================================
-    // HORÁRIO DE ABERTURA
-    // ========================================================
+  for (
+    let minutos = inicioEmMinutos;
+    minutos <= limiteReservaEmMinutos;
+    minutos += 15
+  ) {
+    const hora = Math.floor(minutos / 60);
 
-    const [
-        horaAbertura,
-        minutoAbertura
-    ] =
-        horarioDia.abertura
-            .substring(0, 5)
-            .split(":")
-            .map(Number);
+    const minuto = minutos % 60;
 
+    const horaFormatada = `${String(hora).padStart(2, "0")}:${String(minuto).padStart(2, "0")}`;
 
-    // ========================================================
-    // HORÁRIO DE FECHAMENTO
-    // ========================================================
-
-    const [
-        horaFechamento,
-        minutoFechamento
-    ] =
-        horarioDia.fechamento
-            .substring(0, 5)
-            .split(":")
-            .map(Number);
-
-
-    const inicioEmMinutos =
-        horaAbertura * 60 +
-        minutoAbertura;
-
-
-    const fechamentoEmMinutos =
-        horaFechamento * 60 +
-        minutoFechamento;
-
-
-    // ========================================================
-    // LIMITE DA ÚLTIMA RESERVA
-    // ========================================================
-
-    let limiteReservaEmMinutos =
-        fechamentoEmMinutos;
-
-
-    if (
-        configBanco.horario_limite_ultima_reserva
-    ) {
-
-        const [
-            horaLimite,
-            minutoLimite
-        ] =
-            configBanco
-                .horario_limite_ultima_reserva
-                .substring(0, 5)
-                .split(":")
-                .map(Number);
-
-
-        const limiteConfiguracao =
-            horaLimite * 60 +
-            minutoLimite;
-
-
-        /*
-         * O último horário disponível será
-         * o menor entre:
-         *
-         * - fechamento do dia
-         * - limite da última reserva
-         */
-
-        limiteReservaEmMinutos =
-            Math.min(
-                fechamentoEmMinutos,
-                limiteConfiguracao
-            );
-
-    }
-
-
-    // ========================================================
-    // GERAR HORÁRIOS DE 15 EM 15 MINUTOS
-    // ========================================================
-
-    for (
-        let minutos = inicioEmMinutos;
-        minutos <= limiteReservaEmMinutos;
-        minutos += 15
-    ) {
-
-        const hora =
-            Math.floor(
-                minutos / 60
-            );
-
-
-        const minuto =
-            minutos % 60;
-
-
-        const horaFormatada =
-            `${String(hora).padStart(2, "0")}:${String(minuto).padStart(2, "0")}`;
-
-
-        horariosFuncionamento.push(
-            horaFormatada
-        );
-
-    }
-
-
+    horariosFuncionamento.push(horaFormatada);
+  }
 }
-
 
 // ============================================================
 // ATUALIZAR TEXTOS DA INTERFACE
 // ============================================================
 
 function atualizarTextosInterface(config) {
+  const elemTolerancia = document.querySelector(
+    ".tolerancia",
+  );
 
-    const elemTolerancia =
-        document.querySelector(
-            ".lista-regras li:nth-child(1) p"
+  if (elemTolerancia) {
+    elemTolerancia.textContent = `Mesa garantida por até ${config.tolerancia_atraso_horas} horas após o horário agendado.`;
+  }
+
+  const elemBeach = document.querySelector(".taxa-beach");
+
+  if (elemBeach) {
+    elemBeach.textContent = `Cobramos presencialmente uma taxa de R$ ${parseFloat(
+      config.taxa_pessoa_beach_club,
+    )
+      .toFixed(2)
+      .replace(
+        ".",
+        ",",
+      )} por pessoa para utilização da infraestrutura da área restrita.`;
+  }
+
+  const elemFaqReserva = document.querySelector(
+    ".faq-lista .faq-item:nth-child(1) .faq-resposta p",
+  );
+
+  if (elemFaqReserva) {
+    elemFaqReserva.innerHTML = `As reservas pelo site estão disponíveis para pessoas <strong>individuais e grupos de até ${config.max_pessoas_reserva} pessoas</strong>. Caso prefira vir sem reserva, o atendimento é realizado por <strong>ordem de chegada</strong> de acordo com a <strong>disponibilidade de mesas</strong>.`;
+  }
+
+  // ========================================================
+  // HORÁRIOS NO FOOTER
+  // ========================================================
+
+  const elemHorarioFooter = document.querySelector(
+    ".funcionamento p:nth-child(2)",
+  );
+
+  if (elemHorarioFooter) {
+    const nomesDias = [
+      "Domingo",
+      "Segunda-feira",
+      "Terça-feira",
+      "Quarta-feira",
+      "Quinta-feira",
+      "Sexta-feira",
+      "Sábado",
+    ];
+
+    const dias = configBanco.dias_funcionamento || {};
+
+    const textosDias = [];
+
+    Object.keys(dias).forEach((dia) => {
+      const horario = dias[dia];
+
+      if (horario && horario.abertura && horario.fechamento) {
+        textosDias.push(
+          `${nomesDias[Number(dia)]}: ${horario.abertura.substring(0, 5)}h às ${horario.fechamento.substring(0, 5)}h`,
         );
+      }
+    });
 
-
-    if (elemTolerancia) {
-
-        elemTolerancia.textContent =
-            `Mesa garantida por até ${config.tolerancia_atraso_minutos} minutos após o horário agendado.`;
-
+    if (textosDias.length > 0) {
+      elemHorarioFooter.innerHTML = `<strong>Restaurante:</strong> ${textosDias.join(" | ")}.`;
     }
+  }
 
+  // ========================================================
+  // BEACH CLUB
+  // ========================================================
 
-    const elemBeach =
-        document.querySelector(
-            ".lista-regras li:nth-child(6) p"
-        );
+  const campoBeach = document.querySelector(".campo-beach");
 
+  if (campoBeach) {
+    const permiteBeach = Number(config.permitir_reserva_beach_club) === 1;
 
-    if (elemBeach) {
-
-        elemBeach.textContent =
-            `Cobramos presencialmente uma taxa de R$ ${parseFloat(
-                config.taxa_pessoa_beach_club
-            )
-                .toFixed(2)
-                .replace(".", ",")} por pessoa para utilização da infraestrutura da área restrita.`;
-
-    }
-
-
-    const elemFaqReserva =
-        document.querySelector(
-            ".faq-lista .faq-item:nth-child(1) .faq-resposta p"
-        );
-
-
-    if (elemFaqReserva) {
-
-        elemFaqReserva.innerHTML =
-            `Para mesas individuais e pequenas famílias, o atendimento é por <strong>ordem de chegada</strong>. As reservas pelo site são exclusivas para <strong>grupos e excursões</strong> a partir de ${config.min_pessoas_reserva} pessoas.`;
-
-    }
-
-
-    // ========================================================
-    // HORÁRIOS NO FOOTER
-    // ========================================================
-
-    const elemHorarioFooter =
-        document.querySelector(
-            ".funcionamento p:nth-child(2)"
-        );
-
-
-    if (elemHorarioFooter) {
-
-        const nomesDias = [
-            "Domingo",
-            "Segunda-feira",
-            "Terça-feira",
-            "Quarta-feira",
-            "Quinta-feira",
-            "Sexta-feira",
-            "Sábado"
-        ];
-
-
-        const dias =
-            configBanco.dias_funcionamento || {};
-
-
-        const textosDias = [];
-
-
-        Object.keys(dias).forEach((dia) => {
-
-            const horario =
-                dias[dia];
-
-
-            if (
-                horario &&
-                horario.abertura &&
-                horario.fechamento
-            ) {
-
-                textosDias.push(
-                    `${nomesDias[Number(dia)]}: ${horario.abertura.substring(0, 5)}h às ${horario.fechamento.substring(0, 5)}h`
-                );
-
-            }
-
-        });
-
-
-        if (textosDias.length > 0) {
-
-            elemHorarioFooter.innerHTML =
-                `<strong>Restaurante:</strong> ${textosDias.join(" | ")}.`;
-
-        }
-
-    }
-
-
-    // ========================================================
-    // BEACH CLUB
-    // ========================================================
-
-    const campoBeach =
-        document.querySelector(
-            ".campo-beach"
-        );
-
-
-    if (campoBeach) {
-
-        const permiteBeach =
-            Number(
-                config.permitir_reserva_beach_club
-            ) === 1;
-
-
-        if (!permiteBeach) {
-
-            campoBeach.innerHTML = `
+    if (!permiteBeach) {
+      campoBeach.innerHTML = `
                 <label>Reserva para Beach Club?</label>
 
                 <p
@@ -600,10 +399,8 @@ function atualizarTextosInterface(config) {
                     Beach Club indisponível no momento
                 </p>
             `;
-
-        } else {
-
-            campoBeach.innerHTML = `
+    } else {
+      campoBeach.innerHTML = `
                 <label>Reserva para Beach Club?</label>
 
                 <select
@@ -626,713 +423,374 @@ function atualizarTextosInterface(config) {
                     style="color: red;"
                 ></span>
             `;
-
-        }
-
     }
+  }
 
+  const telefoneRestaurante = config.contato_restaurante;
+  const telefoneFormatado = `(${telefoneRestaurante.slice(0,2)}) ${telefoneRestaurante.slice(2,3)}${telefoneRestaurante.slice(3,6)}${telefoneRestaurante.slice(6,11)}`
+
+  const contato = document.querySelectorAll('.contato-header');
+  contato.forEach(element => {
+    element.href = `https://api.whatsapp.com/send/?phone=${config.contato_restaurante}&text&type=phone_number&app_absent=0&utm_source=ig`
+  })
+  const contatoFooter = document.querySelector('.contato-footer');
+  contatoFooter.innerText = `📞 ${telefoneFormatado}`
+
+  const contatoEmail = document.querySelector('.contato-email');
+  contatoEmail.innerText = config.contato_email;
 }
-
 
 // ============================================================
 // QUANDO A DATA FOR ALTERADA
 // ============================================================
 
 data.addEventListener("change", function () {
+  // Limpa horários antigos
+  containerHorarios.innerHTML = "";
 
-    // Limpa horários antigos
-    containerHorarios.innerHTML = "";
+  // Limpa horário selecionado
+  inputHorario.value = "";
 
-    // Limpa horário selecionado
-    inputHorario.value = "";
+  // ========================================================
+  // VERIFICAR DATA
+  // ========================================================
 
+  if (!this.value) {
+    containerHorarios.innerHTML = "<p>Insira uma data primeiro</p>";
 
-    // ========================================================
-    // VERIFICAR DATA
-    // ========================================================
+    return;
+  }
 
-    if (!this.value) {
+  // ========================================================
+  // CONVERTER DATA DD/MM/YYYY
+  // ========================================================
 
-        containerHorarios.innerHTML =
-            "<p>Insira uma data primeiro</p>";
+  const partesData = this.value.split("/");
 
-        return;
+  if (partesData.length !== 3) {
+    containerHorarios.innerHTML = "<p>Data inválida.</p>";
 
-    }
+    return;
+  }
 
+  const dia = Number(partesData[0]);
 
-    // ========================================================
-    // CONVERTER DATA DD/MM/YYYY
-    // ========================================================
+  const mes = Number(partesData[1]) - 1;
 
-    const partesData =
-        this.value.split("/");
+  const ano = Number(partesData[2]);
 
+  const dataSelecionada = new Date(ano, mes, dia);
 
-    if (partesData.length !== 3) {
+  // ========================================================
+  // GERAR HORÁRIOS DO DIA
+  // ========================================================
 
-        containerHorarios.innerHTML =
-            "<p>Data inválida.</p>";
+  gerarHorariosDisponiveis(dataSelecionada);
 
-        return;
+  // ========================================================
+  // VERIFICAR SE EXISTEM HORÁRIOS
+  // ========================================================
 
-    }
+  if (horariosFuncionamento.length === 0) {
+    containerHorarios.innerHTML =
+      "<p>Nenhum horário disponível para esta data.</p>";
 
+    return;
+  }
 
-    const dia =
-        Number(partesData[0]);
+  // ========================================================
+  // CRIAR BOTÕES
+  // ========================================================
 
+  horariosFuncionamento.forEach((hora) => {
+    const btnHora = document.createElement("button");
 
-    const mes =
-        Number(partesData[1]) - 1;
+    btnHora.type = "button";
 
+    btnHora.textContent = hora;
 
-    const ano =
-        Number(partesData[2]);
+    btnHora.classList.add("btn-horario");
 
+    btnHora.addEventListener("click", function (e) {
+      e.preventDefault();
 
-    const dataSelecionada =
-        new Date(
-            ano,
-            mes,
-            dia
-        );
+      // Remove seleção dos outros
+      document.querySelectorAll(".btn-horario").forEach((btn) => {
+        btn.classList.remove("selecionado");
+      });
 
+      // Seleciona o botão atual
+      this.classList.add("selecionado");
 
-    // ========================================================
-    // GERAR HORÁRIOS DO DIA
-    // ========================================================
+      // Salva horário
+      inputHorario.value = hora;
 
-    gerarHorariosDisponiveis(
-        dataSelecionada
-    );
+      // Remove mensagem de erro
+      spnhorario.innerText = "";
+    });
 
-
-    // ========================================================
-    // VERIFICAR SE EXISTEM HORÁRIOS
-    // ========================================================
-
-    if (
-        horariosFuncionamento.length === 0
-    ) {
-
-        containerHorarios.innerHTML =
-            "<p>Nenhum horário disponível para esta data.</p>";
-
-        return;
-
-    }
-
-
-    // ========================================================
-    // CRIAR BOTÕES
-    // ========================================================
-
-    horariosFuncionamento.forEach(
-        (hora) => {
-
-            const btnHora =
-                document.createElement(
-                    "button"
-                );
-
-
-            btnHora.type =
-                "button";
-
-
-            btnHora.textContent =
-                hora;
-
-
-            btnHora.classList.add(
-                "btn-horario"
-            );
-
-
-            btnHora.addEventListener(
-                "click",
-                function (e) {
-
-                    e.preventDefault();
-
-
-                    // Remove seleção dos outros
-                    document
-                        .querySelectorAll(
-                            ".btn-horario"
-                        )
-                        .forEach((btn) => {
-
-                            btn.classList.remove(
-                                "selecionado"
-                            );
-
-                        });
-
-
-                    // Seleciona o botão atual
-                    this.classList.add(
-                        "selecionado"
-                    );
-
-
-                    // Salva horário
-                    inputHorario.value =
-                        hora;
-
-
-                    // Remove mensagem de erro
-                    spnhorario.innerText =
-                        "";
-
-                }
-            );
-
-
-            containerHorarios.appendChild(
-                btnHora
-            );
-
-        }
-    );
-
+    containerHorarios.appendChild(btnHora);
+  });
 });
-
 
 // ============================================================
 // VALIDAR NOME
 // ============================================================
 
 function validarNome(nome) {
+  if (!nome || nome.trim() === "") {
+    spnnome.innerText = "Insira um nome válido!";
 
-    if (
-        !nome ||
-        nome.trim() === ""
-    ) {
+    return false;
+  }
 
-        spnnome.innerText =
-            "Insira um nome válido!";
+  if (nome.replace(/\s/g, "").length < 8) {
+    spnnome.innerText = "O nome precisa conter pelo menos 8 caracteres.";
 
-        return false;
+    return false;
+  }
 
-    }
+  const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ]+(\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+$/;
 
+  if (!regexNome.test(nome.trim())) {
+    spnnome.innerText = "Caracteres especiais não são permitidos.";
 
-    if (
-        nome
-            .replace(/\s/g, "")
-            .length < 8
-    ) {
+    return false;
+  }
 
-        spnnome.innerText =
-            "O nome precisa conter pelo menos 8 caracteres.";
+  spnnome.innerText = "";
 
-        return false;
-
-    }
-
-
-    const regexNome =
-        /^[A-Za-zÀ-ÖØ-öø-ÿ]+(\s+[A-Za-zÀ-ÖØ-öø-ÿ]+)+$/;
-
-
-    if (
-        !regexNome.test(
-            nome.trim()
-        )
-    ) {
-
-        spnnome.innerText =
-            "Caracteres especiais não são permitidos.";
-
-        return false;
-
-    }
-
-
-    spnnome.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR EMAIL
 // ============================================================
 
 function validarEmail(email) {
+  if (!email || email.trim() === "") {
+    spnemail.innerText = "Insira um e-mail válido!";
 
-    if (
-        !email ||
-        email.trim() === ""
-    ) {
+    return false;
+  }
 
-        spnemail.innerText =
-            "Insira um e-mail válido!";
+  const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        return false;
+  if (!regexEmail.test(email.trim())) {
+    spnemail.innerText = "Insira um e-mail válido!";
 
-    }
+    return false;
+  }
 
+  spnemail.innerText = "";
 
-    const regexEmail =
-        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-
-    if (
-        !regexEmail.test(
-            email.trim()
-        )
-    ) {
-
-        spnemail.innerText =
-            "Insira um e-mail válido!";
-
-        return false;
-
-    }
-
-
-    spnemail.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR TELEFONE
 // ============================================================
 
 function validarTelefone(numero) {
+  if (!numero || numero.trim() === "") {
+    spntelefone.innerText = "Este campo é obrigatório!";
 
-    if (
-        !numero ||
-        numero.trim() === ""
-    ) {
+    return false;
+  }
 
-        spntelefone.innerText =
-            "Este campo é obrigatório!";
+  const regexTelefone = /^(?:\+?55\s?)?(?:\(?\d{2}\)?\s?)?9\d{4}[-\s]?\d{4}$/;
 
-        return false;
+  if (!regexTelefone.test(numero.trim())) {
+    spntelefone.innerText = "Telefone inválido!";
 
-    }
+    return false;
+  }
 
+  spntelefone.innerText = "";
 
-    const regexTelefone =
-        /^(?:\+?55\s?)?(?:\(?\d{2}\)?\s?)?9\d{4}[-\s]?\d{4}$/;
-
-
-    if (
-        !regexTelefone.test(
-            numero.trim()
-        )
-    ) {
-
-        spntelefone.innerText =
-            "Telefone inválido!";
-
-        return false;
-
-    }
-
-
-    spntelefone.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR DATA
 // ============================================================
 
 function validarData(date) {
+  if (!date || date.trim() === "") {
+    spndata.innerText = "Este campo é obrigatório!";
 
-    if (
-        !date ||
-        date.trim() === ""
-    ) {
+    return false;
+  }
 
-        spndata.innerText =
-            "Este campo é obrigatório!";
+  spndata.innerText = "";
 
-        return false;
-
-    }
-
-
-    spndata.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR HORÁRIO
 // ============================================================
 
 function validarHorario(hora) {
+  if (!hora || hora.trim() === "") {
+    spnhorario.innerText = "Selecione um horário disponível!";
 
-    if (
-        !hora ||
-        hora.trim() === ""
-    ) {
+    return false;
+  }
 
-        spnhorario.innerText =
-            "Selecione um horário disponível!";
+  if (configBanco) {
+    const antecedenciaMinDias =
+      parseInt(configBanco.antecedencia_min_reserva_dias, 10) || 0;
 
+    const partesData = data.value.split("/");
+
+    if (partesData.length === 3) {
+      const dataSelecionada = new Date(
+        partesData[2],
+        partesData[1] - 1,
+        partesData[0]
+      );
+
+      
+      dataSelecionada.setHours(0, 0, 0, 0);
+
+      const hoje = new Date();
+      hoje.setHours(0, 0, 0, 0);
+
+      
+      const dataMinimaPermitida = new Date(hoje);
+      dataMinimaPermitida.setDate(hoje.getDate() + antecedenciaMinDias);
+
+      if (dataSelecionada < dataMinimaPermitida) {
+        spnhorario.innerText = `As reservas exigem antecedência mínima de ${antecedenciaMinDias} dia(s).`;
         return false;
-
+      }
     }
+  }
 
+  spnhorario.innerText = "";
 
-    if (configBanco) {
-
-        const antecedenciaMinHoras =
-            parseInt(
-                configBanco
-                    .antecedencia_min_reserva_horas,
-                10
-            ) || 0;
-
-
-        const partesData =
-            data.value.split("/");
-
-
-        if (
-            partesData.length === 3
-        ) {
-
-            const dataSelecionada =
-                new Date(
-                    partesData[2],
-                    partesData[1] - 1,
-                    partesData[0]
-                );
-
-
-            const hoje =
-                new Date();
-
-
-            const ehHoje =
-                dataSelecionada.getDate() ===
-                    hoje.getDate() &&
-
-                dataSelecionada.getMonth() ===
-                    hoje.getMonth() &&
-
-                dataSelecionada.getFullYear() ===
-                    hoje.getFullYear();
-
-
-            if (ehHoje) {
-
-                const agoraMaisAntecedencia =
-                    new Date();
-
-
-                agoraMaisAntecedencia.setHours(
-                    agoraMaisAntecedencia.getHours() +
-                    antecedenciaMinHoras
-                );
-
-
-                const [
-                    horasSel,
-                    minutosSel
-                ] =
-                    hora
-                        .split(":")
-                        .map(Number);
-
-
-                const dataHorarioSelecionado =
-                    new Date();
-
-
-                dataHorarioSelecionado.setHours(
-                    horasSel,
-                    minutosSel,
-                    0,
-                    0
-                );
-
-
-                if (
-                    dataHorarioSelecionado <
-                    agoraMaisAntecedencia
-                ) {
-
-                    spnhorario.innerText =
-                        `Reservas para hoje exigem antecedência mínima de ${antecedenciaMinHoras}h.`;
-
-                    return false;
-
-                }
-
-            }
-
-        }
-
-    }
-
-
-    spnhorario.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR PESSOAS
 // ============================================================
 
 function validarPessoas(pessoasInput) {
+  const valor = pessoasInput.value ? pessoasInput.value.trim() : "";
 
-    const valor =
-        pessoasInput.value
-            ? pessoasInput.value.trim()
-            : "";
+  if (!valor) {
+    spnpessoas.innerText = "Este campo é obrigatório!";
 
+    return false;
+  }
 
-    if (!valor) {
+  const numPessoas = parseInt(valor, 10);
 
-        spnpessoas.innerText =
-            "Este campo é obrigatório!";
+  const min = configBanco ? parseInt(configBanco.min_pessoas_reserva) : 30;
 
-        return false;
+  const max = configBanco ? parseInt(configBanco.max_pessoas_reserva) : 50;
 
-    }
+  if (isNaN(numPessoas)) {
+    spnpessoas.innerText = "Insira um número válido!";
 
+    return false;
+  }
 
-    const numPessoas =
-        parseInt(
-            valor,
-            10
-        );
+  if (numPessoas < min) {
+    spnpessoas.innerText = `Mínimo de ${min} pessoas para reservar.`;
 
+    return false;
+  }
 
-    const min =
-        configBanco
-            ? parseInt(
-                configBanco.min_pessoas_reserva
-            )
-            : 30;
+  if (numPessoas > max) {
+    spnpessoas.innerText = `Máximo de ${max} pessoas para reservar.`;
 
+    return false;
+  }
 
-    const max =
-        configBanco
-            ? parseInt(
-                configBanco.max_pessoas_reserva
-            )
-            : 50;
+  spnpessoas.innerText = "";
 
-
-    if (isNaN(numPessoas)) {
-
-        spnpessoas.innerText =
-            "Insira um número válido!";
-
-        return false;
-
-    }
-
-
-    if (numPessoas < min) {
-
-        spnpessoas.innerText =
-            `Mínimo de ${min} pessoas para reservar.`;
-
-        return false;
-
-    }
-
-
-    if (numPessoas > max) {
-
-        spnpessoas.innerText =
-            `Máximo de ${max} pessoas para reservar.`;
-
-        return false;
-
-    }
-
-
-    spnpessoas.innerText = "";
-
-    return true;
-
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR BEACH CLUB
 // ============================================================
 
 function validarBeach(option) {
-
-    if (
-        configBanco &&
-        Number(
-            configBanco.permitir_reserva_beach_club
-        ) === 0
-    ) {
-
-        spnbeach.innerText = "";
-
-        return true;
-
-    }
-
-
-    if (
-        !option ||
-        option.trim() === ""
-    ) {
-
-        spnbeach.innerText =
-            "Este campo é obrigatório!";
-
-        return false;
-
-    }
-
-
+  if (configBanco && Number(configBanco.permitir_reserva_beach_club) === 0) {
     spnbeach.innerText = "";
 
     return true;
+  }
 
+  if (!option || option.trim() === "") {
+    spnbeach.innerText = "Este campo é obrigatório!";
+
+    return false;
+  }
+
+  spnbeach.innerText = "";
+
+  return true;
 }
-
 
 // ============================================================
 // VALIDAR FORMULÁRIO
 // ============================================================
 
 function credenciaisValidas() {
+  let valido = true;
 
-    let valido = true;
+  if (!validarNome(nomeCliente.value)) {
+    valido = false;
+  }
 
+  if (!validarEmail(emailCliente.value)) {
+    valido = false;
+  }
 
-    if (
-        !validarNome(
-            nomeCliente.value
-        )
-    ) {
+  if (!validarTelefone(telefoneCliente.value)) {
+    valido = false;
+  }
 
-        valido = false;
+  if (!validarData(data.value)) {
+    valido = false;
+  }
 
-    }
+  if (!validarHorario(inputHorario.value)) {
+    valido = false;
+  }
 
+  if (!validarPessoas(qtdPessoas)) {
+    valido = false;
+  }
 
-    if (
-        !validarEmail(
-            emailCliente.value
-        )
-    ) {
+  if (reservaBeach && !validarBeach(reservaBeach.value)) {
+    valido = false;
+  }
 
-        valido = false;
-
-    }
-
-
-    if (
-        !validarTelefone(
-            telefoneCliente.value
-        )
-    ) {
-
-        valido = false;
-
-    }
-
-
-    if (
-        !validarData(
-            data.value
-        )
-    ) {
-
-        valido = false;
-
-    }
-
-
-    if (
-        !validarHorario(
-            inputHorario.value
-        )
-    ) {
-
-        valido = false;
-
-    }
-
-
-    if (
-        !validarPessoas(
-            qtdPessoas
-        )
-    ) {
-
-        valido = false;
-
-    }
-
-
-    if (
-        reservaBeach &&
-        !validarBeach(
-            reservaBeach.value
-        )
-    ) {
-
-        valido = false;
-
-    }
-
-
-    return valido;
-
+  return valido;
 }
-
 
 // ============================================================
 // ENVIO DO FORMULÁRIO
 // ============================================================
 
-formulario.addEventListener(
-    "submit",
-    (event) => {
+formulario.addEventListener("submit", (event) => {
+  event.preventDefault();
 
-        event.preventDefault();
+  if (!credenciaisValidas()) {
+    return;
+  }
 
+  btnConfirmar.disabled = true;
 
-        if (!credenciaisValidas()) {
+  const modal = document.createElement("div");
 
-            return;
-
-        }
-
-
-        btnConfirmar.disabled = true;
-
-
-        const modal =
-            document.createElement(
-                "div"
-            );
-
-
-        modal.style = `
+  modal.style = `
             display: flex;
             align-items: center;
             position: fixed;
@@ -1346,8 +804,7 @@ formulario.addEventListener(
             font-size: 20px;
         `;
 
-
-        modal.innerHTML = `
+  modal.innerHTML = `
             <div
                 class="varela-round-regular"
                 style="
@@ -1400,68 +857,62 @@ formulario.addEventListener(
             </div>
         `;
 
+  body.appendChild(modal);
 
-        body.appendChild(modal);
+  // ========================================================
+  // CONFIRMAR
+  // ========================================================
 
+  modal.querySelector(".btn-confirmar").addEventListener("click", () => {
+    btnConfirmar.innerText = "Enviando...";
 
-        // ========================================================
-        // CONFIRMAR
-        // ========================================================
+    setInterval(() => {
+      btnConfirmar.disabled = false;
+      btnConfirmar.innerText = "Garantir Minha Reserva";
+    }, 5000);
 
-        modal
-            .querySelector(".btn-confirmar")
-            .addEventListener(
-                "click",
-                () => {
+    body.removeChild(modal);
 
-                    btnConfirmar.innerText =
-                        "Enviando...";
+    formulario.submit();
+  });
 
-                    setInterval(()=>{
-                        btnConfirmar.disabled = false;
-                        btnConfirmar.innerText = "Garantir Minha Reserva";
-                    },5000)    
+  // ========================================================
+  // CANCELAR
+  // ========================================================
 
+  modal.querySelector(".btn-cancelar").addEventListener("click", () => {
+    btnConfirmar.disabled = false;
 
-                    body.removeChild(
-                        modal
-                    );
+    btnConfirmar.innerText = "Garantir Minha Reserva";
 
+    body.removeChild(modal);
+  });
+});
 
-                    formulario.submit();
+function atualizarRegras(configBanco) {
+  const listaRegras = document.querySelector(".lista-regras");
+  if (!listaRegras) return;
 
-                }
-            );
+  let regras = configBanco.regras_restaurante;
 
+  if (regras && typeof regras === "object" && !Array.isArray(regras)) {
+    regras = Object.values(regras);
+  }
 
-        // ========================================================
-        // CANCELAR
-        // ========================================================
+  if (!Array.isArray(regras)) {
+    return;
+  }
 
-        modal
-            .querySelector(".btn-cancelar")
-            .addEventListener(
-                "click",
-                () => {
-
-                    btnConfirmar.disabled =
-                        false;
-
-
-                    btnConfirmar.innerText =
-                        "Garantir Minha Reserva";
-
-
-                    body.removeChild(
-                        modal
-                    );
-
-                }
-            );
-
-    }
-);
-
+  regras.forEach((element) => {
+    let listregra = document.createElement("li");
+    listregra.innerHTML = `
+            <div>
+              <strong>${element.titulo || ""}</strong>
+              <p>${element.conteudo || ""}</p>
+            </div>`;
+    listaRegras.appendChild(listregra);
+  });
+}
 
 // ============================================================
 // INICIALIZAÇÃO

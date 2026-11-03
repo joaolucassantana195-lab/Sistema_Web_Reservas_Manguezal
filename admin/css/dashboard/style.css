@@ -508,28 +508,44 @@ section{
     overflow-y: auto;
 }
 .btn-obs{
-border-radius: 10px;
-padding:7px; 
+width: 40px;
+height: 40px;
+border: none;
+border-radius: 5px;
+padding:5px; 
 background:#00608a;
-color: white;
-font-weight: bold;
 }
 .btn-obs:hover{
     background:#004360;
+}
+.btn-obs img{
+    width: 100%;
+    height: auto;
 }
 
 .td-status{
     width: 100%;
     display: flex;
-    justify-content: end;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: end;
 }
-.mesa-numero{
-    background-color: rgb(132, 132, 132);
+.mesa-beachclub{
+    padding: 5px;
+    color: #0075a7;
+    font-weight: 600;
     border-radius: 10px;
-    color: white;
+}
+.mesa-areaaberta{
+    padding: 5px;
+    color: orange;
+    font-weight: 600;
+    border-radius: 10px;
+}
+.mesa-numero{
+    color: rgb(132, 132, 132);
     font-weight: bold;
-    width: fit-content;
+    width: auto;
 }
 .btn-alterar-mesa{
     display: flex;
@@ -585,6 +601,11 @@ font-weight: bold;
 .modal-erro {
     background-color: #d61900d8;
     border-radius: 15px;
+}
+.img-agenda{
+    padding: 20px;
+    width: 130px;
+    height: 130px;
 }
 @media (max-width: 768px) {
     .cards-resumo {

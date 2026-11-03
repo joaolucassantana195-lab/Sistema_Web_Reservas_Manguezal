@@ -21,7 +21,7 @@
                 <h1 class="varela-round-regular">Login</h1>
                 <form class="varela-round-regular">
                     <label for="Email">Email</label>
-                    <input type="email" name="email" id="email" placeholder="Digite seu email">
+                    <input type="text" name="email" id="email" placeholder="Digite seu email">
                     <label for="Senha">Senha</label>
                     <input type="password" name="senha" id="senha" placeholder="Digite sua senha">
                     <span></span>

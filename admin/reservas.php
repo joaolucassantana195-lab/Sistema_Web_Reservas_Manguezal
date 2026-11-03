@@ -230,7 +230,8 @@ if(empty($_SESSION['usuario_logado'] )){
                 <div class="content">
                     <div class="container-filtrar">
                         <h2>Filtrar tabela</h2>
-                        <div class="data"><p>Data</p><input type="date" id="data"></div>
+                        <div>
+                            <div class="data"><p>Data</p><input type="date" id="data"></div>
                         <div class="status">
                             <p>Status</p>
                             <select name="status" id="status">
@@ -243,8 +244,10 @@ if(empty($_SESSION['usuario_logado'] )){
                                 <option value="Em Atendimento">Em Atendimento</option>
                             </select>
                         </div>
-                        <div class="cliente"><p>Cliente</p></p><input type="text" name="cliente" id="cliente" placeholder="Insira o nome do cliente"></div>
+                        <div class="cliente"><p>Cliente</p><input type="text" name="cliente" id="cliente" placeholder="Insira o nome do cliente"></div>
+                        </div>
                         <button class="btn-filtro" onclick="filtrar(event)">Procurar</button>
+                        
                     </div>
                     <h2>Resultado</h2>
                         
@@ -252,7 +255,7 @@ if(empty($_SESSION['usuario_logado'] )){
                         </div>
                              <div class=sem-reservas>
                                 <div class="img-agenda">
-                                    <img src="images/icone-caderneta.png" alt="">
+                                    <img src="images/icone-caderneta.png" alt="Sem reservas" width="100%" height="auto">
                                 </div>
                                 <div class="text-error-table">
                                 <p>Nenhuma reserva encontrada.</p>

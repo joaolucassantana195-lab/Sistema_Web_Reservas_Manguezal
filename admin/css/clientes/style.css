@@ -242,13 +242,6 @@ section{
     margin: auto;
     display: flex;
 }
-input{
-    border-radius: 10px;
-    border: none;
-    background-color: #dfdede;
-    padding: 10px;
-    max-width: 400px;
-}
 select{
     width: 150px;
     height: 30px;
@@ -312,13 +305,11 @@ select{
   color: var(--text-main, #333333);
 }
 
-/* Inputs de Texto, Email e Telefone */
 .container-filtrar input[type="text"],
 .container-filtrar input[type="phone"],
-.container-filtrar input[type="email"],
-.container-filtrar input[type="tel"] {
+.container-filtrar input[type="email"]{
   width: 100%;
-  height: 42px;
+  height: 30px;
   padding: 0 14px;
   background-color: var(--input-bg, #dfdede);
   border: 1.5px solid var(--border-color, #00618a73);
@@ -367,6 +358,7 @@ select{
 
 /* Botão Filtrar (Principal) */
 .btn-filtrar {
+  width: 50%;
   background-color: var(--primary-light, #0075a7);
   color: var(--text-light, #ffffff);
   box-shadow: 0 2px 4px rgba(0, 117, 167, 0.2);
@@ -379,6 +371,7 @@ select{
 
 /* Botão Limpar Filtros (Secundário) */
 .btn-limparfiltros {
+  width: 50%;
   background-color: var(--input-bg, #dfdede);
   color: var(--text-main, #333333);
   border: 1.5px solid var(--border-color, #00618a73);
@@ -406,7 +399,7 @@ select{
     border-left: 3px var(--primary-light) solid;
   border-bottom: 3px var(--primary-light) solid;
     gap: 10px;
-    min-width: 260px;
+    min-width: 290px;
     box-shadow: -5px 10px 15px rgba(0, 0, 0, 0.233);
 }
 .linha-cliente:hover {
@@ -434,9 +427,10 @@ select{
     font-family: Arial;
     font-weight:600;
     border: none;
-    border-radius: 15px;
-    height: 50px;
+    border-radius: 10px;
     padding: 10px;
+    width: 50%;
+    height: 50px;
 }
 .btn-verreservas:hover{
     cursor: pointer;
@@ -643,6 +637,47 @@ select{
     width: 35px;
     height: 35px;
     background-color: transparent;
+}
+.btn-bloquear{
+    background-color: #d80000;
+    color: white;
+    font-family: Arial;
+    font-weight:600;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    width: 50%;
+    height: 50px;
+
+}
+.btn-bloquear:hover{
+    background-color: #860000;
+}
+.btn-desbloquear{
+    background-color: #ececec;
+    color: red;
+    font-family: Arial;
+    font-weight:600;
+    border: 1px solid red;
+    border-radius: 10px;
+    padding: 10px;
+    width: 50%;
+    height: 50px;
+
+}
+.btn-desbloquear:hover{
+    background-color: #ffa3a3;
+    color: #ececec;
+}
+
+.bloqueado{
+     border-left: 3px var(--status-error) solid;
+  border-bottom: 3px var(--status-error) solid;
+}
+.img-agenda{
+    padding: 20px;
+    width: 130px;
+    height: 130px;
 }
 
 @media (max-width: 768px) {

@@ -139,4 +139,17 @@ function atualizarTextosSobre(config) {
 
         } 
   }
+
+  const telefoneRestaurante = config.contato_restaurante;
+  const telefoneFormatado = `(${telefoneRestaurante.slice(0,2)}) ${telefoneRestaurante.slice(2,3)}${telefoneRestaurante.slice(3,6)}${telefoneRestaurante.slice(6,11)}`
+
+  const contato = document.querySelectorAll('.contato-header');
+  contato.forEach(element => {
+    element.href = `https://api.whatsapp.com/send/?phone=${config.contato_restaurante}&text&type=phone_number&app_absent=0&utm_source=ig`
+  })
+  const contatoFooter = document.querySelector('.contato-footer');
+  contatoFooter.innerText = `📞 ${telefoneFormatado}`;
+
+  const contatoEmail = document.querySelector('.contato-email');
+  contatoEmail.innerText = config.contato_email;
 }

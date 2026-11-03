@@ -43,3 +43,5 @@ try {
     echo json_encode(['erro' => 'Erro ao buscar mesas']);
     exit;
 }
+
+?>

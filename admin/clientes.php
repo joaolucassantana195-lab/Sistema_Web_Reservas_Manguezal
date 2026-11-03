@@ -249,7 +249,7 @@ if(empty($_SESSION['usuario_logado'] )){
                     </div>
                     <div class="nenhum-cliente">
                                 <div class="img-agenda">
-                                    <img src="images/icone-nenhumcliente.png" alt="">
+                                    <img src="images/icone-nenhumcliente.png" alt="Sem clientes" width="100%" height="100%">
                                 </div>
                                 <div class="text-error-table">
                                 <p>Nenhum cliente encontrado.</p>

@@ -37,7 +37,8 @@ try {
             c.Nome AS nome,
             c.ID_cliente AS id,
             c.Telefone AS telefone,
-            c.Email AS email
+            c.Email AS email,
+            c.bloqueado AS bloqueado
         FROM cliente c
     ';
 

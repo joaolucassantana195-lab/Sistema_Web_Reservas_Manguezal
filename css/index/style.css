@@ -417,7 +417,7 @@ nav div a:hover {
   scale: 1;
   animation: btn-explosao 0.5s 1 1.5s ease-in-out forwards;
   transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease, scale 0.2s ease-in-out;
-  font-size: 25px;
+  font-size: 1.1rem;
 }
 
 .home-info div a:hover {
@@ -1037,12 +1037,6 @@ nav div a:hover {
   background: #f7faf8;
 }
 
-.lista-regras .icone {
-  min-width: 30px;
-  font-size: 1.3rem;
-  line-height: 1;
-}
-
 .lista-regras strong {
   display: block;
   font-size: 0.9rem;
@@ -1614,7 +1608,7 @@ nav div a:hover {
   .home-info div a {
     min-width: 185px;
     padding: 13px 22px;
-    font-size: 20px;
+    font-size: 1.1rem;
   }
 
   #comidas {
@@ -1779,7 +1773,7 @@ nav div a:hover {
   }
 
   .home-info div a {
-    font-size: 13px;
+    font-size: 1rem;
     min-width: 75px;
     padding: 5px 10px;
   }

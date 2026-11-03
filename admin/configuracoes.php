@@ -250,7 +250,26 @@ if(empty($_SESSION['usuario_logado'] )){
                   </div>
                 </div>
               </div>
-            </div>
+
+                  <div class="config-card">
+              <div class="card-header">
+                <i class="fa-solid fa-user-group"></i>
+                <h2>Informações de contato</h2>
+              </div>
+              <div class="card-body" id="card-login">
+                 <div class="opcao">
+                   <label class="opcao-label" for="opcao-regras">Telefone para contato</label>
+                   <span class="opcao-desc">Será exibido no site de reservas e emails.</span>
+                   <input type="number" name="numero_telefone" id="numero-telefone" placeholder="Ex: 11222223333" maxlength="11">
+                </div>
+                 <div class="opcao">
+                   <label class="opcao-label" for="opcao-regras">Email para contato</label>
+                   <span class="opcao-desc">Email usado para receber mensagens dos clientes.</span>
+                   <input type="email" name="email_contato" id="email-contato" placeholder="Insira o email do restaurante" maxlength="50">
+                </div>
+                </div>
+              </div>
+            
 
                 <div class="config-card">
               <div class="card-header">
@@ -381,7 +400,7 @@ if(empty($_SESSION['usuario_logado'] )){
                   <label class="opcao-label" for="antecedencia-minima">Antecedência mínima p/ reservar</label>
                   <div class="input-suffix">
                   <input type="number" id="antecedencia-minima" name="antecedencia_minima"/>
-                  <span>horas</span>
+                  <span>dias</span>
                   </div>
                 </div>
 
@@ -403,7 +422,7 @@ if(empty($_SESSION['usuario_logado'] )){
                   <label class="opcao-label" for="tolerancia-atraso">Tolerância de atraso</label>
                   <div class="input-suffix">
                     <input type="number" name="tolerancia_atraso" id="tolerancia-atraso" min="0"/>
-                    <span>minutos</span>
+                    <span>horas</span>
                   </div>
                 </div>
 
@@ -437,6 +456,27 @@ if(empty($_SESSION['usuario_logado'] )){
                 </div>
 
               </div>
+            </div>
+
+            <!-- Card Regras -->
+
+            <div class="config-card">
+              <div class="card-header">
+                <i class="fa-solid fa-umbrella-beach"></i>
+                <h2>Contato e Regras</h2>
+              </div>
+              <div class="card-body">
+                <div class="opcao">
+                   <label class="opcao-label" for="opcao-regras">Regras do restaurante</label>
+                   <span class="opcao-desc">Serão exibidas no site de reservas e nos emails.</span>
+                    <div class="container-regras-flex">
+                      
+                  </div>
+                <div>
+                    <button class="adicionar-regra" onclick="adicionarRegra()"><span>+</span></button>
+                </div>
+              </div>
+            </div>
             </div>
 
             <!-- Card 4: Notificações Automáticas -->

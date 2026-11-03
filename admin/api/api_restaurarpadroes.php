@@ -45,21 +45,32 @@ try {
         ]
     ];
 
+    $regras = [
+        "0" => [
+            "titulo" => "🍾 Taxa de Rolha",
+            "conteudo" => "Traga seu vinho! Cobramos R$ 50,00 por garrafa aberta."
+        ],
+        "1" => [
+            "titulo" => "🍴 Alimentos e Bebidas Externos",
+            "conteudo" => "É estritamente proibido entrar com coolers, isopores, alimentos ou bebidas trazidos de fora."
+        ]
+    ];
+
 
     // ============================================================
     // CONFIGURAÇÕES PADRÃO
     // ============================================================
 
     $padroes = [
-        ':minPessoas'           => 20,
-        ':maxPessoas'           => 50,
-        ':minReservas'          => 6,
+        ':minPessoas'           => 1,
+        ':maxPessoas'           => 15,
+        ':minReservas'          => 2,
         ':antecedenciaMax'      => 30,
-        ':maxReservas'          => 40,
+        ':maxReservas'          => 10,
         ':reservaBeach'         => 1,
         ':taxaBeach'            => 30,
         ':horarioLimite'        => '16:00',
-        ':atraso'               => 15,
+        ':atraso'               => 2,
         ':confirmacaoAutomatica'=> 1,
         ':emailConfirmacao'     => 1,
         ':enviarLembrete'       => 1,
@@ -69,7 +80,16 @@ try {
             JSON_UNESCAPED_UNICODE |
             JSON_UNESCAPED_SLASHES |
             JSON_FORCE_OBJECT
-        )
+        ),
+        ':regras' => json_encode(
+            $regras,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES |
+            JSON_FORCE_OBJECT
+        ),
+        ':contatoRestaurante' => 7197129517,
+
+        ':contatoEmail' => "contato.restaurante.manguezal@gmail.com",
     ];
 
 
@@ -149,21 +169,23 @@ try {
 
     $sql = "
         UPDATE configuracoes SET 
-
             min_pessoas_reserva = :minPessoas,
             max_pessoas_reserva = :maxPessoas,
-            antecedencia_min_reserva_horas = :minReservas,
+            antecedencia_min_reserva_dias = :minReservas,
             antecedencia_max_reserva_dias = :antecedenciaMax,
             limite_max_reservas_dia = :maxReservas,
             permitir_reserva_beach_club = :reservaBeach,
             taxa_pessoa_beach_club = :taxaBeach,
             horario_limite_ultima_reserva = :horarioLimite,
-            tolerancia_atraso_minutos = :atraso,
+            tolerancia_atraso_horas = :atraso,
             confirmar_reservas_automaticamente = :confirmacaoAutomatica,
             enviar_email_confirmacao = :emailConfirmacao,
             enviar_email_lembrete = :enviarLembrete,
             horas_antecedencia_lembrete = :antecedenciaLembrete,
-            dias_funcionamento = :dias
+            dias_funcionamento = :dias,
+            regras_restaurante = :regras,
+            contato_restaurante = :contatoRestaurante,
+            contato_email = :contatoEmail
 
         WHERE id = 1
     ";

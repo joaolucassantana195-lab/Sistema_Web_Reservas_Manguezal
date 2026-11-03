@@ -78,7 +78,7 @@ function atualizarStatusOcupacao(tipo_ocupacao) {
     if (!tipo_ocupacao) {
         return 'Desocupada';
     }
-    return String(tipo_ocupacao).toUpperCase();
+    return 'Ocupada por ' + String(tipo_ocupacao).toUpperCase();
 }
 
 function atualizarMesas(numero, status, local) {
@@ -108,15 +108,24 @@ function atualizarMesas(numero, status, local) {
 
                 displayMesas.innerHTML += `
                     <div class="card-mesa card-${limparTexto(element.ocupacao.toLowerCase())}">
-                        <div class="card-fechar">
-                        <span><span class="mesa-${limparTexto(element.mesa_local.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ''))}">${limparTexto(element.mesa_local.toUpperCase())}</span></span>
-                            ${podeRemover ? `<span class="btn-remover" onclick="removerMesa(event, ${element.mesa_id})"><img src="images/icone-lixeira.png" alt="Remover" width="100%" height="auto"></span>` : ''}
-                        </div>
                         <div class="content-card">
-                            <span class="card-numero">${limparTexto(element.mesa_numero)}</span>
-                            <span><strong>Capacidade máx.: </strong> ${limparTexto(element.mesa_capacidade)}</span>
+                            <div class="container-card-numero">
+                                <div style=" display:flex; flex-direction:row; gap: 10px; justify-content:center; align-items:center;">
+                               <span class="container-img-mesa">
+                                <img src="images/icone-mesa.png" alt"icone-mesa" width="100%" height="auto">
+                                </span>
+                                <div>
+                                    <span class="card-numero"><strong>Mesa </strong>${limparTexto(element.mesa_numero)}</span>
+                                    <span><strong>${limparTexto(element.mesa_capacidade)} pessoas</strong></span>
+                                </div>
+                                </div>
+                                <div class="card-fechar">
+                                    ${podeRemover ? `<span class="btn-remover" onclick="removerMesa(event, ${element.mesa_id})"><img src="images/icone-lixeira.png" alt="Remover" width="100%" height="auto"></span>` : ''}
+                                </div>
+                            </div>
+                            <span><span class="mesa-${limparTexto(element.mesa_local.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ''))}">${limparTexto(element.mesa_local.toUpperCase())}</span></span>
+                            <span><span>${limparTexto(atualizarStatusOcupacao(element.mesa_tipo_ocupacao))}</span></span>
                             <span><strong>Reservante: </strong><span>${limparTexto(atualizarStatus(element.ocupacao.toLowerCase(), element.cliente_nome, reservaId))}</span></span>
-                            <span><strong>Ocupação: </strong><span>${limparTexto(atualizarStatusOcupacao(element.mesa_tipo_ocupacao))}</span></span>
                             <div class="card-acoes">
                                 <button class="btn-${limparTexto(element.ocupacao.toLowerCase())}" onclick="ocuparMesa(${element.mesa_id}, '${element.ocupacao}', ${element.mesa_numero}, ${reservaId}, ${estaEmAtendimento}, '${element.mesa_tipo_ocupacao}')">
                                     ${limparTexto(acaoTexto)}
@@ -451,8 +460,8 @@ function iterarMesas() {
                 
                 <label style="display:flex; align-items:center; cursor:pointer; font-size:15px;">Localização:</label>
                 <select id="iteracao-local" style="width:100%; height:34px;">
-                    <option value="beach">Beach Club</option>
-                    <option value="áreaAberta" selected>Área aberta</option>
+                    <option value="Beach Club">Beach Club</option>
+                    <option value="Área aberta" selected>Área aberta</option>
                 </select>
                 <span id="spn-err" style="color:red; font-size:14px; font-weight:400; min-height:18px;"></span>
             </div>

@@ -37,6 +37,35 @@ function obterFeriados() {
 
   return feriados;
 }
+function obterRegras() {
+  const regras = [];
+
+  const regrasItens = document.querySelectorAll(
+    ".container-regras-flex .regra"
+  );
+
+  regrasItens.forEach((regraItem) => {
+    const titulo = regraItem.querySelector(
+      'input[name="regra-titulo"]'
+    );
+
+    const conteudo = regraItem.querySelector(
+      'input[name="regra-conteudo"]'
+    );
+
+    if (!titulo || !titulo.value) {
+      return;
+    }
+
+    regras.push({
+      titulo: titulo.value,
+      conteudo: conteudo ? conteudo.value : "",
+    });
+  });
+
+
+  return regras;
+}
 
 function obterContainerNotificacoes() {
   let container = document.querySelector(".container-notificacoes");
@@ -228,6 +257,32 @@ function removerFeriado(e){
 
 }
 
+function adicionarRegra(){
+  const divflexRegras = document.querySelector('.container-regras-flex');
+  let div = document.createElement('div');
+  div.classList = 'regra'
+  div.innerHTML = `<div style="width: 100%; display:flex; flex-direction:row; justify-content:end; margin-bottom:5px;">
+                        <button class="remover-regra" onclick="removerRegra(event)"><span>x</span></button>
+                        </div>
+                        <div>
+                          <label class="opcao-label" for="opcao-regras">Título </label>
+                        <input type="text" name="regra-titulo" id="regra-titulo" maxlength="50" placeholder="Nome da regra" value="">
+                        </div>
+                         <div>
+                          <label class="opcao-label" for="opcao-regras">Conteúdo</label>
+                          <input type="text" name="regra-conteudo" id="regra-conteudo" maxlength="200" placeholder="Especifique a regra" value="">
+                        </div>
+                      </div>
+    `
+                      
+    divflexRegras.appendChild(div)
+}
+
+function removerRegra(e){
+  const divRegra = e.target.closest(".regra");
+    divRegra.remove();
+}
+ 
 // ============================================================
 // HORÁRIOS DOS DIAS
 // ============================================================
@@ -376,6 +431,36 @@ function exibirFeriados(data, descricao, recorrente){
     `
    
 }
+function exibirRegras(element){
+  const divRegras = document.querySelector('.container-regras-flex');
+  divRegras.innerHTML = ''
+  let dadosRegras = JSON.parse(element)
+
+  if (dadosRegras && typeof dadosRegras === "object" && !Array.isArray(dadosRegras)) {
+    dadosRegras = Object.values(dadosRegras);
+  }
+
+  if (!Array.isArray(dadosRegras)) {
+    dadosRegras = [];
+  }
+  dadosRegras.forEach(el => {
+    divRegras.innerHTML += `<div class="regra">
+                        <div style="width: 100%; display:flex; flex-direction:row; justify-content:end; margin-bottom:5px;">
+                        <button class="remover-regra" onclick="removerRegra(event)"><span>x</span></button>
+                        </div>
+                        <div>
+                          <label class="opcao-label" for="opcao-regras">Título </label>
+                        <input type="text" name="regra-titulo" id="regra-titulo" maxlength="50" placeholder="Nome da regra" value="${el.titulo}">
+                        </div>
+                         <div>
+                          <label class="opcao-label" for="opcao-regras">Conteúdo</label>
+                          <input type="text" name="regra-conteudo" id="regra-conteudo" maxlength="200" placeholder="Especifique a regra" value="${el.conteudo}">
+                        </div>
+                      </div>
+    `
+  });
+   
+}
 
 // ============================================================
 // BUSCAR CONFIGURAÇÕES
@@ -431,6 +516,10 @@ function buscarConfigs() {
 
   const antecedenciaLembrete = document.querySelector("#antecedencia-lembrete");
 
+  const contatoRestaurante = document.querySelector('#numero-telefone');
+
+  const contatoEmail = document.querySelector('#email-contato');
+
   fetch("../admin/api/api_configuracoes.php")
     .then((response) => {
       if (!response.ok) {
@@ -466,13 +555,14 @@ function buscarConfigs() {
       // ================================================
 
       aplicarHorariosFuncionamento(element.dias_funcionamento);
+      exibirRegras(element.regras_restaurante);
 
       // ================================================
       // OUTRAS CONFIGURAÇÕES
       // ================================================
 
       if (antecedenciaMinima) {
-        antecedenciaMinima.value = element.antecedencia_min_reserva_horas;
+        antecedenciaMinima.value = element.antecedencia_min_reserva_dias;
       }
 
       if (horarioUltimaReserva) {
@@ -480,7 +570,7 @@ function buscarConfigs() {
       }
 
       if (toleranciaAtraso) {
-        toleranciaAtraso.value = element.tolerancia_atraso_minutos;
+        toleranciaAtraso.value = element.tolerancia_atraso_horas;
       }
 
       // ================================================
@@ -494,6 +584,14 @@ function buscarConfigs() {
 
       if (taxaBeach) {
         taxaBeach.value = element.taxa_pessoa_beach_club;
+      }
+
+      if(contatoRestaurante){
+        contatoRestaurante.value = element.contato_restaurante
+      }
+
+      if(contatoEmail){
+        contatoEmail.value = element.contato_email
       }
 
       // ================================================
@@ -574,8 +672,10 @@ function salvarAlteracoes() {
             const taxaBeach = document.querySelector("#taxa-beach") ? document.querySelector("#taxa-beach").value : "";
              const inputConfirmacaoAutomatica = document.querySelector("#confirmacao-automatica");
               const inputEmailConfirmacao = document.querySelector("#email-confirmacao");
-               const inputEnviarLembrete = document.querySelector("#enviar-lembrete"); const
-                antecedenciaLembrete = document.querySelector("#antecedencia-lembrete") ? document.querySelector("#antecedencia-lembrete").value : "";
+               const inputEnviarLembrete = document.querySelector("#enviar-lembrete"); 
+               const antecedenciaLembrete = document.querySelector("#antecedencia-lembrete") ? document.querySelector("#antecedencia-lembrete").value : "";
+                const contatoRestaurante = document.querySelector("#numero-telefone") ? document.querySelector("#numero-telefone").value  : '';
+                const contatoEmail = document.querySelector("#email-contato") ? document.querySelector("#email-contato").value  : '';
                   // ================================================ // CONVERTER CHECKBOXES // ================================================ 
                   const opcaoBeach = inputBeach === "sim" ? 1 : 0;
                    const confirmacaoAutomatica = inputConfirmacaoAutomatica && inputConfirmacaoAutomatica.checked ? 1 : 0;
@@ -584,6 +684,7 @@ function salvarAlteracoes() {
                       // ================================================ // PAYLOAD // ================================================ 
                       const horariosFuncionamento = obterHorariosFuncionamento();
                       const feriados = obterFeriados();
+                      const regras = obterRegras();
 
 const payload = {
   minPessoas: minPessoas,
@@ -600,7 +701,10 @@ const payload = {
   enviarLembrete: enviarLembrete,
   lembrete: antecedenciaLembrete,
   dias: horariosFuncionamento,
-  feriados: feriados
+  feriados: feriados,
+  regras : regras,
+  contatoRestaurante : contatoRestaurante,
+  contatoEmail : contatoEmail
 };
 
     
@@ -752,15 +856,15 @@ function restaurarPadroes() {
           // ====================================
 
           if (document.querySelector("#minimo-pessoas")) {
-            document.querySelector("#minimo-pessoas").value = 20;
+            document.querySelector("#minimo-pessoas").value = 1;
           }
 
           if (document.querySelector("#maximo-pessoas")) {
-            document.querySelector("#maximo-pessoas").value = 50;
+            document.querySelector("#maximo-pessoas").value = 15;
           }
 
           if (document.querySelector("#maximo-reservas")) {
-            document.querySelector("#maximo-reservas").value = 40;
+            document.querySelector("#maximo-reservas").value = 10;
           }
 
           if (document.querySelector("#antecedencia-maxima")) {
@@ -768,7 +872,7 @@ function restaurarPadroes() {
           }
 
           if (document.querySelector("#antecedencia-minima")) {
-            document.querySelector("#antecedencia-minima").value = 6;
+            document.querySelector("#antecedencia-minima").value = 2;
           }
 
           if (document.querySelector("#horario-ultima-reserva")) {
@@ -776,7 +880,7 @@ function restaurarPadroes() {
           }
 
           if (document.querySelector("#tolerancia-atraso")) {
-            document.querySelector("#tolerancia-atraso").value = 15;
+            document.querySelector("#tolerancia-atraso").value = 2;
           }
 
           if (document.querySelector("#opcao-beach")) {
@@ -801,6 +905,13 @@ function restaurarPadroes() {
 
           if (document.querySelector("#antecedencia-lembrete")) {
             document.querySelector("#antecedencia-lembrete").value = 6;
+          }
+
+          if (document.querySelector("#numero-telefone")) {
+            document.querySelector("#numero-telefone").value = 7197129517;
+          }
+          if (document.querySelector("#email-contato")) {
+            document.querySelector("#email-contato").value = "contato.restaurante.manguezal@gmail.com";
           }
 
           // ====================================

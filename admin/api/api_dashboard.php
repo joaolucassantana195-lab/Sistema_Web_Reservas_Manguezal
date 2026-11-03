@@ -17,6 +17,7 @@ try {
             r.QTD_pessoas AS reserva_qtd_pessoas,
             r.Status AS reserva_status,
             r.Data AS reserva_dia,
+            r.BEACH_CLUB AS reserva_beach,
             r.Observacoes AS reserva_observacao,
             c.Nome AS cliente_nome,
             c.Telefone AS cliente_telefone,

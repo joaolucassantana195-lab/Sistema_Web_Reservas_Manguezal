@@ -91,20 +91,21 @@ function ativarArrasteNosContaineres() {
     });
 }
 
-function permitirAlterarMesa(status, reserva_id) {
+function permitirAlterarMesa(status, reserva_id, beachclub) {
     if (status === 'Confirmada' || status === 'Em Atendimento') {
-        return `<span onclick="alterarMesa(event, ${reserva_id})" class="btn-alterar-mesa"><img src="images/alterarMesa.png"></span>`;
+        return `<span onclick="alterarMesa(event, ${reserva_id}, ${beachclub})" class="btn-alterar-mesa"><img src="images/alterarMesa.png"></span>`;
     }
     return '';
 }
 
-function alterarMesa(e, reserva_id) {
+function alterarMesa(e, reserva_id, beachclub) {
     e.preventDefault();
 
+    // Localiza a linha da reserva para pegar a data e informações necessárias
     const linha = e.target.closest('.linha-reservas');
-    const qtdPessoas = linha?.querySelector('#celula-qtdpessoas')?.textContent || 1;
-    const dataHoje = new Date().toLocaleDateString('sv-SE');
+    const qtdPessoas = linha?.querySelector('.celula-qtdpessoas')?.textContent || 1;
 
+    // Cria a estrutura do modal
     const modal = document.createElement('div');
     modal.style = `
         position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -119,6 +120,7 @@ function alterarMesa(e, reserva_id) {
                 <select id="select-nova-mesa" style="width: 100%; padding: 10px; font-size: 16px; border-radius: 8px; border: 1px solid #00608a;">
                     <option value="">Carregando mesas disponíveis...</option>
                 </select>
+                <span class="spn-erro"></span>
             </div>
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 10px;">
                 <button class="btn-confirmar" style="background:#00608a; color:white; border:none; padding:8px 16px; border-radius:5px; font-weight:bold; cursor:pointer;">Confirmar</button>
@@ -133,37 +135,57 @@ function alterarMesa(e, reserva_id) {
     const btnConfirmar = modal.querySelector('.btn-confirmar');
     const btnCancelar = modal.querySelector('.btn-cancelar');
 
-    fetch(`../admin/api/api_mesas_select.php?data=${dataHoje}`)
+    // Busca as mesas disponíveis na API para aquela data
+    fetch(`../admin/api/api_mesas_select.php`)
         .then(r => {
             if (!r.ok) throw new Error("Erro ao buscar mesas.");
             return r.json();
         })
         .then(mesas => {
             selectMesa.innerHTML = '';
+            
+            let disponiveis = [];
+            /*
+            if (beachclub === 1) {
+                disponiveis = mesas.filter(m =>
+                    m.ocupacao === 'Livre' &&
+                    m.mesa_ativa == true &&
+                    m.mesa_capacidade >= parseInt(qtdPessoas) &&
+                    m.mesa_local == 'Beach Club'
+                ); 
+            } else {
+                disponiveis = mesas.filter(m =>
+                    m.ocupacao === 'Livre' &&
+                    m.mesa_ativa == true &&
+                    m.mesa_capacidade >= parseInt(qtdPessoas) &&
+                    m.mesa_local != 'Beach Club'
+                ); 
+            }*/
 
-            const disponiveis = mesas.filter(m =>
-                m.ocupacao === 'Livre' &&
-                m.mesa_ativa == true &&
-                m.mesa_capacidade >= parseInt(qtdPessoas)
-            );
+                disponiveis = mesas.filter(m =>
+                    m.ocupacao === 'Livre' &&
+                    m.mesa_ativa == true &&
+                    m.mesa_capacidade >= parseInt(qtdPessoas)
+                ); 
 
-            if (disponiveis.length === 0) {
-                selectMesa.innerHTML = `<option value="">Nenhuma mesa disponível para este tamanho de grupo.</option>`;
+           if (disponiveis.length === 0) {
+                selectMesa.innerHTML = `<option value="">Nenhuma mesa disponível com capacidade suficiente.</option>`;
                 btnConfirmar.disabled = true;
                 btnConfirmar.style.opacity = '0.5';
             } else {
-                selectMesa.innerHTML = `<option value="">Selecione uma mesa...</option>`;
+                selectMesa.innerHTML = `<option value="">Selecione...</option>`;
                 disponiveis.forEach(m => {
-                    const localMesa = m.mesa_local ? m.mesa_local.toUpperCase() : '';
-                    selectMesa.innerHTML += `<option value="${m.mesa_id}">Mesa ${limparTexto(m.mesa_numero)} ${limparTexto(localMesa)} (Máx. ${m.mesa_capacidade} pessoas)</option>`;
+                    selectMesa.innerHTML += `<option value="${m.mesa_id}">Mesa ${limparTexto(m.mesa_numero)} - ${limparTexto(m.mesa_local.toUpperCase())} (Máx. ${m.mesa_capacidade} pessoas)</option>`;
                 });
             }
         })
         .catch(error => {
+            
             exibirModalErro('Não foi possível carregar as mesas disponíveis.');
             body.removeChild(modal);
         });
 
+    // Ação ao confirmar a troca
     btnConfirmar.addEventListener('click', () => {
         const novaMesaId = selectMesa.value;
 
@@ -175,13 +197,15 @@ function alterarMesa(e, reserva_id) {
         btnConfirmar.disabled = true;
         btnConfirmar.textContent = 'Salvando...';
 
-        fetch('../admin/api/api_atualizarstatus.php', {
+        // Requisição para atualizar a FK_Mesa_ID_Mesa
+         fetch('../admin/api/api_atualizarstatus.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
                 id: reserva_id,
                 status: linha?.querySelector('.status-reserva')?.textContent.trim() ?? 'Em Atendimento',
-                mesa: novaMesaId
+                mesa: novaMesaId,
+                acao: 'alterarMesa'
             })
         })
         .then(async response => {
@@ -195,18 +219,20 @@ function alterarMesa(e, reserva_id) {
                 body.removeChild(modal);
                 atualizarDashboard();
             } else {
+                
                 exibirModalErro(data.erro || 'Erro ao alterar a mesa.');
                 btnConfirmar.disabled = false;
                 btnConfirmar.textContent = 'Confirmar';
             }
-        })
-        .catch(error => {
+        }).catch(error => {
+            
             exibirModalErro('Falha na conexão com o servidor.');
             btnConfirmar.disabled = false;
             btnConfirmar.textContent = 'Confirmar';
         });
     });
 
+    // Ação ao cancelar o modal
     btnCancelar.addEventListener('click', () => {
         body.removeChild(modal);
     });
@@ -242,17 +268,20 @@ function atualizarDashboard() {
                 // Acumula o HTML na string
                 htmlConteudo += `
                     <div class="linha-reservas">
-                    <div class="celula-reservas td-status"><span class="status-${limparTexto(statusClass)} status-reserva">${limparTexto(element.reserva_status)}</span></div>
+                    <div class="celula-reservas td-status">
+                    <span class="mesa-${limparTexto(element.mesa_local.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ''))}">${limparTexto(element.mesa_local ? element.mesa_local.toUpperCase() : '')}</span>
+                    <span class=" status-reserva status-${limparTexto(statusClass)}">${limparTexto(element.reserva_status)}</span>
+                    </div>
                     <div class="celula-reservas">
                     <h3>${limparTexto(element.cliente_nome)}</h3>
                     </div>
                         <div class="container-celula">
                             <div class="celula-reservas"><strong>HORÁRIO</strong><div>${horarioFormatado}</div></div>
                             <div class="celula-reservas"><strong>PESSOAS</strong><div id="celula-qtdpessoas">${element.reserva_qtd_pessoas}</div></div>
-                            <div class="celula-reservas"><strong>MESA</strong><div class="container-numero"><div class="mesa-numero" style='padding: 5px 10px ; color: white;'>${limparTexto(element.mesa_numero)} ${limparTexto(element.mesa_local ? element.mesa_local.toUpperCase() : '')}</div>${permitirAlterarMesa(element.reserva_status, element.reserva_id)}</div></div>
+                            <div class="celula-reservas"><strong>MESA</strong><div class="container-numero"><div class="mesa-numero" style='padding: 5px 10px ;'>${limparTexto(element.mesa_numero)}</div>${permitirAlterarMesa(element.reserva_status, element.reserva_id, element.reserva_beach)}</div></div>
                         </div>
                         <div style="width:100%; display:flex; justify-content:space-between; gap:5px; margin-top:5px;">
-                        <button class="btn-obs" onclick="verObservacoes('${limparTexto(element.cliente_nome)}','${limparTexto(element.reserva_observacao)}')">Observações</button>
+                        <button class="btn-obs" onclick="verObservacoes('${limparTexto(element.cliente_nome)}','${limparTexto(element.reserva_observacao)}')"><img src="images/observacao.png" alt="observações"></button>
                         ${botaoVerLista}
                         </div>
                     </div>

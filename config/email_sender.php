@@ -12,11 +12,11 @@ function criarInstanciaMailer() {
     $mail->SMTPAuth   = true;
     $mail->Username   = EMAIL_USER;
     $mail->Password   = EMAIL_PASS;
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Mais seguro e moderno que 'tls' string
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
     $mail->Port       = EMAIL_PORT;
     $mail->CharSet    = 'UTF-8';
     
-    // Mantém a conexão SMTP viva caso precise enviar vários e-mails em sequência
+    
     $mail->SMTPKeepAlive = true; 
 
     $mail->setFrom('contato.restaurante.manguezal@gmail.com', 'Restaurante Manguezal');
@@ -25,7 +25,22 @@ function criarInstanciaMailer() {
     return $mail;
 }
 
-function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach){
+function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach){
+
+    $regras = json_decode($regrasJson, true);
+    $htmlRegras = '';
+
+    if (is_array($regras)) {
+        foreach ($regras as $regra) {
+            $htmlRegras .= '
+                <tr>
+                    <td style="padding-bottom: 15px;">
+                        <strong>' . $regra['titulo'] . '</strong>
+                        <p style="margin: 2px 0 0 0;">' . $regra['conteudo'] . '</p>
+                    </td>
+                </tr>';
+        }
+    }
     
     $mail = criarInstanciaMailer();
 
@@ -34,21 +49,29 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
         $mail->addAddress($emailCliente, $nomeCliente);
         $mail->Subject = 'Reserva Confirmada — Restaurante Manguezal';
         
-        // Uso de Heredoc (<<<HTML ... HTML;) para renderizar variáveis e manter a leitura limpa
+        
         $mail->Body = <<<HTML
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+</head>
+<body style="background-color: #ffffff !important; margin: 0; padding: 0;">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff !important;">
     <!-- Topo Header -->
     <div style="background: #0d3b5e; padding: 20px; text-align: center;">
         <img src="https://restaurante-manguezal.alwaysdata.net/images/logo-restaurante.png" alt="logo do restaurante" style="margin: 0; width: 200px; display: block; margin: 0 auto;">
     </div>
 
     <!-- Conteúdo Principal -->
-    <div style="padding: 30px; background: #f9f9f9;">
+    <div style="padding: 30px; background: #f9f9f9 !important;">
         <h2 style="color: #0d3b5e; margin-top: 0;">Reserva Confirmada!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Sua reserva foi confirmada com sucesso.</p>
 
         <!-- Container da Reserva -->
-        <div style="color: #022a55; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #207711; border-bottom: 4px solid #207711;">
+        <div style="color: #022a55; background: #cfcfcf !important; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #207711; border-bottom: 4px solid #207711;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top">
@@ -68,47 +91,18 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
             <h3 style="color: #fd0404; margin-bottom: 20px;">Atenção às regras!</h3>
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">⏰</td>
                     <td style="padding-bottom: 15px;">
-                        <strong>Tolerância de Atraso</strong>
+                        <strong>⏰ Tolerância de Atraso</strong>
                         <p style="margin: 2px 0 0 0;">Mesa garantida por até 15 minutos após o horário agendado.</p>
                     </td>
                 </tr>
                 <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🐾</td>
                     <td style="padding-bottom: 15px;">
-                        <strong>Espaço Pet-Friendly</strong>
-                        <p style="margin: 2px 0 0 0;">Seus pets são bem-vindos em nossa varanda/área externa.</p>
+                        <strong>🏝️ Beach-Club</strong>
+                        <p style="margin: 2px 0 0 0;">Cobramos presencialmente uma taxa de R$ {$taxabeach} por pessoa para utilização da infraestrutura da área restrita.</p>
                     </td>
                 </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🍾</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Taxa de Rolha</strong>
-                        <p style="margin: 2px 0 0 0;">Traga seu vinho! Cobramos R$ 50,00 por garrafa aberta.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🎂</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Aniversários</strong>
-                        <p style="margin: 2px 0 0 0;">Sinta-se à vontade para trazer o bolo, não cobramos taxa de serviço.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🍴</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Alimentos e Bebidas Externos</strong>
-                        <p style="margin: 2px 0 0 0;">É estritamente proibido entrar com coolers, isopores, alimentos ou bebidas trazidos de fora.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🏝️</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Beach-Club</strong>
-                        <p style="margin: 2px 0 0 0;">Cobramos presencialmente uma taxa de R$30,00 por pessoa para utilização da infraestrutura da área restrita.</p>
-                    </td>
-                </tr>
+                {$htmlRegras}
             </table>
         </div>
 
@@ -154,6 +148,8 @@ function enviarEmailConfirmacao($emailCliente, $nomeCliente, $data, $horario, $p
         </div>
     </div>
 </div>
+</body>
+</html>
 HTML;
 
         $mail->send();
@@ -177,19 +173,27 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
         
         // Uso de Heredoc (<<<HTML ... HTML;) para renderizar variáveis e manter a leitura limpa
         $mail->Body = <<<HTML
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+</head>
+<body style="background-color: #ffffff !important; margin: 0; padding: 0;">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff !important;">
     <!-- Topo Header -->
     <div style="background: #0d3b5e; padding: 20px; text-align: center;">
         <img src="https://restaurante-manguezal.alwaysdata.net/images/logo-restaurante.png" alt="logo" style="margin: 0; width: 200px; display: block; margin: 0 auto;">
     </div>
 
     <!-- Conteúdo Principal -->
-    <div style="padding: 30px; background: #f9f9f9;">
+    <div style="padding: 30px; background: #f9f9f9 !important;">
         <h2 style="color: #0d3b5e; margin-top: 0;">Reserva Cancelada!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Sua reserva foi <strong style="color:#fd0404;">cancelada</strong>.</p>
 
         <!-- Container da Reserva -->
-        <div style="color: #000000; background: #cfcfcf; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #fd0404; border-bottom: 4px solid #fd0404;">
+        <div style="color: #000000; background: #cfcfcf !important; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #fd0404; border-bottom: 4px solid #fd0404;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top">
@@ -255,6 +259,8 @@ function enviarEmailCancelamento($emailCliente, $nomeCliente, $data, $horario, $
         </div>
     </div>
 </div>
+</body>
+</html>
 HTML;
 
         $mail->send();
@@ -266,7 +272,23 @@ HTML;
     }
 }
 
-function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach){
+function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pessoas, $mesa, $beach, $regrasJson, $taxabeach){
+
+    $regras = json_decode($regrasJson, true);
+    $htmlRegras = '';
+
+    if (is_array($regras)) {
+        foreach ($regras as $regra) {
+            $htmlRegras .= '
+                <tr>
+                    <td style="padding-bottom: 15px;">
+                        <strong>' . $regra['titulo'] . '</strong>
+                        <p style="margin: 2px 0 0 0;">' . $regra['conteudo'] . '</p>
+                    </td>
+                </tr>';
+        }
+    }
+
     $mail = criarInstanciaMailer();
 
     try{
@@ -275,19 +297,27 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
         
         
         $mail->Body = <<<HTML
-<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+</head>
+<body style="background-color: #ffffff !important; margin: 0; padding: 0;">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff !important;">
     
     <div style="background: #0d3b5e; padding: 20px; text-align: center;">
         <img src="https://restaurante-manguezal.alwaysdata.net/images/logo-restaurante.png" alt="logo" style="margin: 0; width: 200px; display: block; margin: 0 auto;">
     </div>
 
     
-    <div style="padding: 30px; background: #ececec;">
+    <div style="padding: 30px; background: #ececec !important;">
         <h2 style="color: #0d3b5e; margin-top: 0;">Não esqueça da sua reserva!</h2>
         <p>Olá, <strong>{$nomeCliente}</strong>! Você possui uma reserva <strong style="color: #20ac00;">confirmada</strong>.</p>
 
         
-        <div style="color: #000000; background:  #f9f9f9; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #ffae00; border-bottom: 4px solid #ffae00;">
+        <div style="color: #000000; background:  #f9f9f9 !important; border-radius: 8px; padding: 20px; margin: 20px 0; border-left: 4px solid #ffae00; border-bottom: 4px solid #ffae00;">
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <td valign="top">
@@ -305,47 +335,18 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
             <h3 style="color: #fd0404; margin-bottom: 20px;">Atenção às regras!</h3>
             <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">⏰</td>
                     <td style="padding-bottom: 15px;">
-                        <strong>Tolerância de Atraso</strong>
+                        <strong>⏰ Tolerância de Atraso</strong>
                         <p style="margin: 2px 0 0 0;">Mesa garantida por até 15 minutos após o horário agendado.</p>
                     </td>
                 </tr>
                 <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🐾</td>
                     <td style="padding-bottom: 15px;">
-                        <strong>Espaço Pet-Friendly</strong>
-                        <p style="margin: 2px 0 0 0;">Seus pets são bem-vindos em nossa varanda/área externa.</p>
+                        <strong>🏝️ Beach-Club</strong>
+                        <p style="margin: 2px 0 0 0;">Cobramos presencialmente uma taxa de R$ {$taxabeach} por pessoa para utilização da infraestrutura da área restrita.</p>
                     </td>
                 </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🍾</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Taxa de Rolha</strong>
-                        <p style="margin: 2px 0 0 0;">Traga seu vinho! Cobramos R$ 50,00 por garrafa aberta.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🎂</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Aniversários</strong>
-                        <p style="margin: 2px 0 0 0;">Sinta-se à vontade para trazer o bolo, não cobramos taxa de serviço.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🍴</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Alimentos e Bebidas Externos</strong>
-                        <p style="margin: 2px 0 0 0;">É estritamente proibido entrar com coolers, isopores, alimentos ou bebidas trazidos de fora.</p>
-                    </td>
-                </tr>
-                <tr>
-                    <td width="30" valign="top" style="padding-bottom: 15px; font-size: 20px;">🏝️</td>
-                    <td style="padding-bottom: 15px;">
-                        <strong>Beach-Club</strong>
-                        <p style="margin: 2px 0 0 0;">Cobramos presencialmente uma taxa de R$30,00 por pessoa para utilização da infraestrutura da área restrita.</p>
-                    </td>
-                </tr>
+                {$htmlRegras}
             </table>
         </div>
 
@@ -391,6 +392,8 @@ function enviarLembreteEmail($emailCliente, $nomeCliente, $data, $horario, $pess
         </div>
     </div>
 </div>
+</body>
+</html>
 HTML;
 
         $mail->send();
@@ -411,7 +414,15 @@ function enviarCodigo($emailAdmin, $codigoVerificacao){
         
         
         $mail->Body = <<<HTML
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+</head>
+<body style="background-color: #ffffff !important; margin: 0; padding: 0;">
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff !important;">
             <div style="display: flex; justify-content: center;">
                 <img src="https://restaurante-manguezal.alwaysdata.net/admin/images/banner-email-verificação.png" alt="Código de verificação" width="100%" height="auto">  
             </div>
@@ -419,12 +430,14 @@ function enviarCodigo($emailAdmin, $codigoVerificacao){
             <h2>Recuperação de Acesso</h2>
             <p>Você solicitou a alteração de email para o painel administrativo.</p>
             <p>Utilize o código abaixo para prosseguir. Ele é válido por <strong>15 minutos</strong>:</p>
-            <div style='background: #f4f4f4; padding: 15px; font-size: 24px; font-weight: bold; letter-spacing: 5px; text-align: center; width: 200px; margin: 20px 0;'>
+            <div style='background: #f4f4f4 !important; padding: 15px; font-size: 24px; font-weight: bold; letter-spacing: 5px; text-align: center; width: 200px; margin: 20px 0;'>
                 {$codigoVerificacao}
             </div>
             <p>Se você não solicitou isso, ignore este e-mail.</p>
             </div>
         </div>
+</body>
+</html>
 HTML;
 
         $mail->send();
@@ -447,7 +460,15 @@ function enviarToken($emailAdmin, $token){
         
         
         $mail->Body = <<<HTML
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff;">
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
+</head>
+<body style="background-color: #ffffff !important; margin: 0; padding: 0;">
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #ffffff !important;">
             <div style="display: flex; justify-content: center;">
                 <img src="https://restaurante-manguezal.alwaysdata.net/admin/images/banner-alteracao-senha.png" alt="Código de verificação" width="100%" height="auto">  
             </div>
@@ -455,7 +476,7 @@ function enviarToken($emailAdmin, $token){
             <h2>Link para redefinir senha</h2>
             <p>Você solicitou a alteração de senha para o painel administrativo.</p>
             <p>Clique no botão abaixo para prosseguir. Ele é válido por <strong>30 minutos</strong>:</p>
-            <div style='background: #f4f4f4; padding: 15px; font-size: 24px; font-weight: bold; letter-spacing: 5px; text-align: center; width: auto; margin: 20px 0;'>
+            <div style='background: #f4f4f4 !important; padding: 15px; font-size: 24px; font-weight: bold; letter-spacing: 5px; text-align: center; width: auto; margin: 20px 0;'>
                 <a href="{$linkRedefinicao}" style="text-decoration: none; letter-spacing: normal; color: white; background-color: rgb(255, 169, 83); padding: 10px 20px; border-radius: 10px;">
                     Recuperar senha
                 </a>
@@ -463,6 +484,8 @@ function enviarToken($emailAdmin, $token){
             <p>Se você não solicitou isso, ignore este e-mail.</p>
             </div>
         </div>
+</body>
+</html>
 HTML;
 
         $mail->send();
@@ -473,4 +496,3 @@ HTML;
         return false;
     }
 }
-?>

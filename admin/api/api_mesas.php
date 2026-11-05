@@ -12,7 +12,7 @@ $numero = $dados['numero'] ?? null;
 $st     = $dados['status'] ?? null;
 $local  = $dados['local'] ?? null;
 
-$dataHoje = date('Y=m=d');
+$dataHoje = date('Y-m-d');
 
 $where  = [];
 $params = [
@@ -33,8 +33,8 @@ if (!empty($numero)) {
 if (!empty($st) && in_array($st, ['Livre', 'Ocupada'], true)) {
     $where[] = 'm.Status = :status';
     $params[':status'] = $st;
-}else if (!empty($st) && in_array($st, ['Reservada'], true)){
-    $where[] = 'r_pendente.FK_Mesa_ID_Mesa = ID_mesa';
+} else if (!empty($st) && $st === 'Reservada') {
+    $where[] = "(m.Status = 'Reservada' OR r_pendente.FK_Mesa_ID_Mesa IS NOT NULL OR r_ativa.FK_Mesa_ID_Mesa IS NOT NULL)";
 }
 
 try {
@@ -105,3 +105,4 @@ try {
     echo json_encode(['erro' => 'Erro ao buscar mesas']);
     exit;
 }
+?>

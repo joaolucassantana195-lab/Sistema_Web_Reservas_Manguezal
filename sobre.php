@@ -204,7 +204,7 @@
   <div class="card-info-pratica">
     <h3>💬 Contato & Dúvidas</h3>
     <p>Atendimento rápido via WhatsApp para dúvidas sobre excursões e grupos:</p>
-    <a href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" class="btn-whatsapp-info">
+    <a class="contato-header whatsapp" href="https://api.whatsapp.com/send/?phone=557197129517&text&type=phone_number&app_absent=0&utm_source=ig" target="_blank" class="btn-whatsapp-info">
       📱 Falar no WhatsApp
     </a>
   </div>

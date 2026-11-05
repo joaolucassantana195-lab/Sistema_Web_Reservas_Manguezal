@@ -708,6 +708,19 @@ main{
 .contato-email{
   word-break: break-all;
 }
+
+.whatsapp{
+  background-color: rgb(102, 255, 47);
+  border-radius: 20px;
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
 /* Responsividade para Celular */
 @media (max-width: 768px) {
     header {
